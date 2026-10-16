@@ -11,9 +11,16 @@ http.createServer(async (req, res) => {
     let f = join(root, p);
     if (!f.startsWith(root)) throw 0;
     let s = await stat(f).catch(() => null);
-    if (s?.isDirectory()) { f = join(f, 'index.html'); s = await stat(f).catch(() => null); }
-    if (!s && !extname(f)) { res.writeHead(301, { Location: p + '/' }); return res.end(); }
-    if (!s) { res.writeHead(404, { 'Content-Type': types['.html'] }); return res.end(await readFile(join(root, '404.html'))); }
+    const exists = async (x) => (await stat(x).catch(() => null))?.isFile() ? x : null;
+    if (s?.isDirectory()) {
+      const idx = await exists(join(f, 'index.html'));
+      if (idx && !p.endsWith('/')) { const u = new URL(req.url, 'http://x'); res.writeHead(301, { Location: p + '/' + u.search }); return res.end(); }
+      f = idx; s = idx ? await stat(idx) : null;
+    } else if (!s && !extname(f)) {
+      const html = await exists(f + '.html');
+      if (html) { f = html; s = await stat(html); }
+    }
+    if (!s || !s.isFile()) { res.writeHead(404, { 'Content-Type': types['.html'], 'Cache-Control': 'no-store' }); return res.end(await readFile(join(root, '404.html')).catch(() => 'Not found')); }
     const ext = extname(f);
     res.writeHead(200, { 'Content-Type': types[ext] || 'application/octet-stream', 'Cache-Control': ext === '.html' ? 'public, max-age=300' : 'public, max-age=31536000, immutable' });
     res.end(await readFile(f));
