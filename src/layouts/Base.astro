@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import { SITE } from '../lib/site';
+interface Props { title: string; description: string; type?: 'website' | 'article'; schema?: object[]; image?: string; noSuffix?: boolean }
+const { title, description, type = 'website', schema = [], image = '/og.png', noSuffix = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const fullTitle = noSuffix ? title : `${title} | ${SITE.name}`;
+const ogImage = new URL(image, Astro.site).href;
+const org = { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, alternateName: SITE.latin, url: Astro.site?.href, logo: new URL('/logo.svg', Astro.site).href };
+const path = Astro.url.pathname;
+const nav = [['/cats/','گربه'],['/dogs/','سگ'],['/birds/','پرندگان'],['/fish/','ماهی'],['/tools/','ابزارها'],['/blog/','مقالات']];
+---
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="preload" href="/fonts/vazirmatn-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <meta name="theme-color" content="#0F6E6B" />
+  <meta property="og:type" content={type} />
+  <meta property="og:locale" content="fa_IR" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify([org, ...schema])} />
+</head>
+<body>
+  <a class="skip" href="#main">پرش به محتوا</a>
+  <header class="top"><div class="wrap">
+    <a class="brand" href="/" aria-label={`${SITE.name} - صفحه اصلی`}><Logo /><span><b>{SITE.name}</b><small>{SITE.tagline}</small></span></a>
+    <nav class="main" aria-label="منوی اصلی">{nav.map(([h,t]) => <a href={h} aria-current={path.startsWith(h) ? 'page' : undefined}>{t}</a>)}</nav>
+  </div></header>
+  <main id="main"><slot /></main>
+  <footer class="foot"><div class="wrap">
+    <div class="cols">
+      <div><b class="display" style="font-size:1.6rem;color:#fff">{SITE.name}</b><p>{SITE.description}</p></div>
+      <div><b>ابزارهای رایگان</b><br/><a href="/tools/cat-age/">محاسبه سن گربه به انسان</a><br/><a href="/tools/dog-age/">محاسبه سن سگ به انسان</a></div>
+      <div><b>دسته‌ها</b><br/><a href="/cats/">گربه</a> · <a href="/dogs/">سگ</a> · <a href="/birds/">پرندگان</a> · <a href="/fish/">ماهی</a><br/><a href="/about/">دربارهٔ همدم</a></div>
+    </div>
+    <p style="margin-top:24px;opacity:.8">مطالب همدم جنبهٔ آموزشی دارد و جایگزین معاینه و تشخیص دامپزشک نیست.</p>
+  </div></footer>
+</body>
+</html>

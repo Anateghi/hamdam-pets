@@ -1,0 +1,6 @@
+---
+import Illo from './Illo.astro';
+import { CATEGORIES, jalali } from '../lib/site';
+const { a } = Astro.props;
+---
+<a class="card" href={`/blog/${a.id}/`}><Illo name={a.data.illustration} /><span class="tag">{CATEGORIES[a.data.category].title}</span><h3>{a.data.title}</h3><p>{a.data.description}</p><span class="meta">{jalali(a.data.date)}</span></a>

@@ -1,0 +1,36 @@
+---
+import Base from './Base.astro';
+import Illo from '../components/Illo.astro';
+import Faq from '../components/Faq.astro';
+import VetNote from '../components/VetNote.astro';
+import { SITE } from '../lib/site';
+const { title, h1, description, slug, illo, faq, links } = Astro.props;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: h1, url, description, applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', browserRequirements: 'Requires JavaScript', inLanguage: 'fa-IR', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'IRR' }, publisher: { '@type': 'Organization', name: SITE.name } },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f: any) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'خانه', item: Astro.site?.href },
+    { '@type': 'ListItem', position: 2, name: 'ابزارها', item: new URL('/tools/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: h1, item: url }] },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">خانه</a> › <a href="/tools/">ابزارها</a> › {h1}</nav>
+    <div class="article">
+      <div class="prose">
+        <h1>{h1}</h1>
+        <slot name="calc" />
+        <slot />
+        <Faq items={faq} />
+        <VetNote />
+      </div>
+      <aside class="side">
+        <Illo name={illo} class="sideillo" />
+        <div class="card"><b>بیشتر بخوانید</b>{links.map(([h, t]: string[]) => <a href={h}>{t}</a>)}</div>
+      </aside>
+    </div>
+  </div>
+</Base>
+<style>.sideillo{width:100%;background:var(--sand);border-radius:18px}</style>

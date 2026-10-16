@@ -1,0 +1,10 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+const list = (await getCollection('articles')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="مقاله‌های همدم" description="همهٔ مقاله‌های آموزشی همدم دربارهٔ تغذیه، سلامت، نژاد و نگهداری گربه، سگ، پرنده و ماهی.">
+  <div class="wrap"><nav class="crumbs"><a href="/">خانه</a> › مقاله‌ها</nav><h1>مقاله‌ها</h1>
+  <div class="grid" style="margin-bottom:40px">{list.map((a) => <ArticleCard a={a} />)}</div></div>
+</Base>

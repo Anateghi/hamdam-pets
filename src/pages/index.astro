@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Illo from '../components/Illo.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE, CATEGORIES } from '../lib/site';
+import { TOOLS } from '../lib/tools';
+const articles = (await getCollection('articles')).sort((a, b) => +b.data.date - +a.data.date);
+const schema = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, alternateName: SITE.latin, url: Astro.site?.href, inLanguage: 'fa-IR' }];
+---
+<Base title={`${SITE.name}؛ ${SITE.tagline}`} description={SITE.description} schema={schema} noSuffix>
+  <section class="hero"><div class="wrap">
+    <div>
+      <span class="tag" style="background:#ffffff22;color:#fff">راهنمای مستقل و رایگان</span>
+      <h1>هر آنچه برای یک همدمِ سالم و شاد باید بدانید</h1>
+      <p>مقاله‌های دقیق دربارهٔ گربه، سگ، پرنده و ماهی، نوشته‌شده با احتیاط علمی، به‌همراه ابزارهای رایگانی که جواب سؤال‌های روزمره‌تان را در چند ثانیه می‌دهند.</p>
+      <p><a class="btn" href="/tools/cat-age/">سن گربه‌ام به انسان چقدر است؟</a> <a class="btn ghost" href="/blog/">خواندن مقاله‌ها</a></p>
+    </div>
+    <Illo name="cat" />
+  </div></section>
+  <section class="block"><div class="wrap">
+    <h2>دسته‌ها</h2>
+    <div class="grid">{Object.entries(CATEGORIES).map(([k, c]) => <a class="card" href={`/${k}/`}><Illo name={c.icon} /><h3>{c.title}</h3><p>{c.blurb}</p></a>)}</div>
+  </div></section>
+  <section class="block tools-band"><div class="wrap">
+    <h2>ابزارهای رایگان همدم</h2>
+    <div class="grid">{TOOLS.map((t) => <a class="card" href={`/tools/${t.slug}/`}><Illo name={t.illo} /><h3>{t.title}</h3><p>{t.blurb}</p></a>)}</div>
+  </div></section>
+  <section class="block"><div class="wrap">
+    <h2>تازه‌ترین مقاله‌ها</h2>
+    <div class="grid">{articles.slice(0, 6).map((a) => <ArticleCard a={a} />)}</div>
+    <p style="margin-top:20px"><a href="/blog/">همهٔ مقاله‌ها ←</a></p>
+  </div></section>
+</Base>

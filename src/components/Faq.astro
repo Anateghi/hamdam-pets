@@ -1,0 +1,4 @@
+---
+const { items = [] } = Astro.props as { items: { q: string; a: string }[] };
+---
+{items.length > 0 && <section class="faq"><h2>پرسش‌های پرتکرار</h2>{items.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</section>}

@@ -1,0 +1,70 @@
+---
+// Custom flat illustrations (brand palette). name: cat | dog | bird | parrot | fish | cat-age | dog-age | food | vaccine
+const { name = 'cat', class: cls = '' } = Astro.props;
+const T='#0F6E6B', S='#E9A23B', P='#C2513A', I='#1E2A32', C='#FBF6EC', M='#9CC9C1';
+---
+<svg class={`illo ${cls}`} viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M30 196V96C30 46 70 12 120 10c50 2 90 36 90 86v100z" fill={M} opacity=".45"/>
+  <g fill="none" stroke={T} stroke-width="1.5" opacity=".35"><path d="M120 22l10 10-10 10-10-10zM60 70l8 8-8 8-8-8zM180 70l8 8-8 8-8-8z"/></g>
+  {name === 'cat' && <g>
+    <path d="M150 170c30-4 46-24 40-48" stroke={S} stroke-width="12" fill="none" stroke-linecap="round"/>
+    <ellipse cx="118" cy="148" rx="46" ry="34" fill={S}/>
+    <path d="M86 92l4-34 24 22zM150 92l-4-34-24 22z" fill={S}/>
+    <circle cx="118" cy="102" r="34" fill={S}/>
+    <path d="M92 64l3-14 10 12zM144 64l-3-14-10 12z" fill={P}/>
+    <ellipse cx="106" cy="100" rx="4" ry="6" fill={I}/><ellipse cx="130" cy="100" rx="4" ry="6" fill={I}/>
+    <path d="M114 112l4 3 4-3z" fill={P}/>
+    <path d="M90 112h-18M90 117l-16 4M146 112h18M146 117l16 4" stroke={I} stroke-width="1.6"/>
+    <path d="M100 160h36" stroke={C} stroke-width="5" stroke-linecap="round" opacity=".7"/>
+  </g>}
+  {name === 'dog' && <g>
+    <ellipse cx="124" cy="152" rx="50" ry="32" fill={C} stroke={I} stroke-width="2"/>
+    <circle cx="120" cy="100" r="36" fill={C} stroke={I} stroke-width="2"/>
+    <path d="M86 84c-14 6-16 34-4 42 8-8 10-26 8-38zM154 84c14 6 16 34 4 42-8-8-10-26-8-38z" fill={P}/>
+    <circle cx="108" cy="98" r="4.5" fill={I}/><circle cx="132" cy="98" r="4.5" fill={I}/>
+    <ellipse cx="120" cy="114" rx="8" ry="6" fill={I}/>
+    <path d="M120 120v6m-8 0q8 8 16 0" stroke={I} stroke-width="2" fill="none"/>
+    <path d="M94 128q26 14 52 0" stroke={T} stroke-width="7" fill="none"/><circle cx="120" cy="140" r="5" fill={S}/>
+    <path d="M172 140q20-16 14-36" stroke={C} stroke-width="10" fill="none" stroke-linecap="round"/>
+  </g>}
+  {(name === 'bird' || name === 'parrot') && <g>
+    <path d="M60 172h130" stroke={I} stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="122" cy="124" rx="30" ry="42" fill={name==='parrot' ? '#3E9A55' : '#E8D27A'}/>
+    <circle cx="122" cy="78" r="24" fill={name==='parrot' ? '#3E9A55' : '#E8D27A'}/>
+    {name==='bird' && <><path d="M118 56c-4-16 8-26 14-20-6 2-8 10-6 20z" fill="#E8D27A"/><circle cx="108" cy="86" r="7" fill={P}/></>}
+    {name==='parrot' && <path d="M104 72q18-14 36 0v8q-18-8-36 0z" fill="#E7C33B"/>}
+    <circle cx="114" cy="76" r="3.6" fill={I}/>
+    <path d="M98 80q-10 4-6 14 8-2 10-10z" fill={name==='parrot'?I:S}/>
+    <path d="M140 110q14 20 4 50-16-18-14-46z" fill={name==='parrot' ? '#2C7A42' : '#BFA34E'}/>
+    <path d="M128 164l10 26M116 164l-6 26" stroke={P} stroke-width="3"/>
+  </g>}
+  {name === 'fish' && <g>
+    <rect x="44" y="70" width="152" height="108" rx="10" fill="#BFE3E6" stroke={T} stroke-width="3"/>
+    <path d="M44 96h152" stroke={T} stroke-width="2" opacity=".5"/>
+    <path d="M100 130q24-26 50 0-26 26-50 0z" fill={S}/><path d="M100 130l-16-12v24z" fill={P}/>
+    <circle cx="138" cy="126" r="3" fill={I}/>
+    <path d="M70 178c0-30 8-40 4-60M170 178c0-20-6-26-2-44" stroke="#3E9A55" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="160" cy="108" r="4" fill="none" stroke={T} stroke-width="2"/><circle cx="168" cy="96" r="2.6" fill="none" stroke={T} stroke-width="2"/>
+  </g>}
+  {(name === 'cat-age' || name === 'dog-age') && <g>
+    <rect x="66" y="40" width="108" height="146" rx="16" fill={I}/>
+    <rect x="80" y="54" width="80" height="36" rx="6" fill={C}/>
+    <text x="120" y="80" text-anchor="middle" font-size="22" font-family="Vazirmatn" fill={T} font-weight="800">{name==='cat-age' ? '۴ = ۳۲' : '۵ = ۳۶'}</text>
+    {[0,1,2].map(r => [0,1,2].map(c => <rect x={82 + c*27} y={102 + r*26} width="21" height="18" rx="4" fill={(r+c)%3===0 ? S : '#3A4A55'}/>))}
+    {name==='cat-age'
+      ? <g transform="translate(160 120)"><circle r="26" fill={S}/><path d="M-20-12l2-18 12 10zM20-12l-2-18-12 10z" fill={S}/><circle cx="-8" cy="-2" r="3" fill={I}/><circle cx="8" cy="-2" r="3" fill={I}/></g>
+      : <g transform="translate(160 120)"><circle r="26" fill={C} stroke={I} stroke-width="2"/><path d="M-24-10c-8 4-6 20 0 24 4-6 4-16 2-22zM24-10c8 4 6 20 0 24-4-6-4-16-2-22z" fill={P}/><circle cx="-8" cy="-4" r="3" fill={I}/><circle cx="8" cy="-4" r="3" fill={I}/><ellipse cy="8" rx="5" ry="4" fill={I}/></g>}
+  </g>}
+  {name === 'vaccine' && <g>
+    <rect x="70" y="100" width="100" height="30" rx="8" fill={C} stroke={I} stroke-width="3" transform="rotate(-30 120 115)"/>
+    <rect x="80" y="104" width="50" height="22" rx="4" fill={T} transform="rotate(-30 120 115)"/>
+    <path d="M168 88l26-15M58 145l-14 8" stroke={I} stroke-width="5" stroke-linecap="round"/>
+    <path d="M150 150h30M165 135v30" stroke={P} stroke-width="8" stroke-linecap="round"/>
+  </g>}
+  {name === 'food' && <g>
+    <path d="M60 140h120l-12 36H72z" fill={P}/>
+    <ellipse cx="120" cy="140" rx="60" ry="12" fill="#8C3A2B"/>
+    {[90,104,118,132,146,110,126].map((x,i) => <circle cx={x} cy={i>4 ? 128 : 136} r="7" fill={S}/>)}
+    <path d="M100 70c0-14 20-14 20 0 0-14 20-14 20 0 0 16-20 26-20 30 0-4-20-14-20-30z" fill={P} opacity=".8"/>
+  </g>}
+</svg>
