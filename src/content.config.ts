@@ -6,7 +6,7 @@ const articles = defineCollection({
     title: z.string(),
     description: z.string(),
     keyword: z.string(),
-    category: z.enum(['cats', 'dogs', 'birds', 'fish']),
+    category: z.enum(['cats', 'dogs', 'birds', 'fish', 'small-pets']),
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
     illustration: z.string().default('cat'),

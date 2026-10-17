@@ -3,8 +3,8 @@ import Base from '../../layouts/Base.astro';
 import Illo from '../../components/Illo.astro';
 import { TOOLS } from '../../lib/tools';
 ---
-<Base title="ابزارهای رایگان حیوانات خانگی" description="ماشین‌حساب‌های رایگان فارسی برای صاحبان حیوانات خانگی: محاسبه سن گربه و سگ به انسان و ابزارهای بیشتر به‌زودی.">
+<Base title="ابزارهای رایگان حیوانات خانگی" description="ماشین‌حساب‌های رایگان فارسی برای صاحبان حیوانات خانگی: محاسبه مقدار غذای روزانهٔ سگ و گربه، محاسبه سن گربه و سگ به انسان و ابزارهای بیشتر به‌زودی.">
   <div class="wrap"><nav class="crumbs"><a href="/">خانه</a> › ابزارها</nav><h1>ابزارهای رایگان</h1>
   <div class="grid" style="margin-bottom:40px">{TOOLS.map((t) => <a class="card" href={`/tools/${t.slug}/`}><Illo name={t.illo} /><h3>{t.title}</h3><p>{t.blurb}</p></a>)}</div>
-  <p class="meta">به‌زودی: محاسبه مقدار غذای سگ و گربه، جدول و یادآور واکسن، محاسبه حجم آکواریوم.</p></div>
+  <p class="meta">به‌زودی: جدول و یادآور واکسن، محاسبه حجم آکواریوم.</p></div>
 </Base>

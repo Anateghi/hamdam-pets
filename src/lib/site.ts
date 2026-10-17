@@ -9,6 +9,7 @@ export const CATEGORIES: Record<string, { title: string; blurb: string; icon: st
   dogs: { title: 'سگ', blurb: 'واکسن، نژاد، آموزش و مراقبت روزانه از سگ‌ها در آپارتمان و حیاط.', icon: 'dog' },
   birds: { title: 'پرندگان', blurb: 'مرغ عشق، عروس هلندی، طوطی برزیلی و هرآنچه برای یک قفس شاد لازم است.', icon: 'bird' },
   fish: { title: 'ماهی و آکواریوم', blurb: 'راه‌اندازی آکواریوم آب شیرین، چرخهٔ نیتروژن و ماهی‌های مناسب مبتدی‌ها.', icon: 'fish' },
+  'small-pets': { title: 'همستر و خرگوش', blurb: 'نگهداری همستر، خرگوش و دیگر حیوانات کوچک: قفس، تغذیه، سلامت و رفتار.', icon: 'rabbit' },
 };
 const faDigits = '۰۱۲۳۴۵۶۷۸۹';
 export const fa = (v: string | number) => String(v).replace(/\d/g, (d) => faDigits[+d]);

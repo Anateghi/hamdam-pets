@@ -14,13 +14,13 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
       <span class="tag" style="background:#ffffff22;color:#fff">راهنمای مستقل و رایگان</span>
       <h1>هر آنچه برای یک همدمِ سالم و شاد باید بدانید</h1>
       <p>مقاله‌های دقیق دربارهٔ گربه، سگ، پرنده و ماهی، نوشته‌شده با احتیاط علمی، به‌همراه ابزارهای رایگانی که جواب سؤال‌های روزمره‌تان را در چند ثانیه می‌دهند.</p>
-      <p><a class="btn" href="/tools/cat-age/">سن گربه‌ام به انسان چقدر است؟</a> <a class="btn ghost" href="/blog/">خواندن مقاله‌ها</a></p>
+      <p><a class="btn" href="/tools/cat-age/">سن گربه‌ام به انسان چقدر است؟</a> <a class="btn ghost" href="/tools/food-calculator/">روزی چند گرم غذا بدهم؟</a></p>
     </div>
     <Illo name="cat" />
   </div></section>
   <section class="block"><div class="wrap">
     <h2>دسته‌ها</h2>
-    <div class="grid">{Object.entries(CATEGORIES).map(([k, c]) => <a class="card" href={`/${k}/`}><Illo name={c.icon} /><h3>{c.title}</h3><p>{c.blurb}</p></a>)}</div>
+    <div class="grid">{Object.entries(CATEGORIES).filter(([k]) => articles.some((a) => a.data.category === k)).map(([k, c]) => <a class="card" href={`/${k}/`}><Illo name={c.icon} /><h3>{c.title}</h3><p>{c.blurb}</p></a>)}</div>
   </div></section>
   <section class="block tools-band"><div class="wrap">
     <h2>ابزارهای رایگان همدم</h2>

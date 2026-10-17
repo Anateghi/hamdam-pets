@@ -1,5 +1,5 @@
 ---
-// Custom flat illustrations (brand palette). name: cat | dog | bird | parrot | fish | cat-age | dog-age | food | vaccine
+// Custom flat illustrations (brand palette). name: cat | dog | bird | parrot | fish | cat-age | dog-age | food | vaccine | rabbit
 const { name = 'cat', class: cls = '' } = Astro.props;
 const T='#0F6E6B', S='#E9A23B', P='#C2513A', I='#1E2A32', C='#FBF6EC', M='#9CC9C1';
 ---
@@ -54,6 +54,16 @@ const T='#0F6E6B', S='#E9A23B', P='#C2513A', I='#1E2A32', C='#FBF6EC', M='#9CC9C
     {name==='cat-age'
       ? <g transform="translate(160 120)"><circle r="26" fill={S}/><path d="M-20-12l2-18 12 10zM20-12l-2-18-12 10z" fill={S}/><circle cx="-8" cy="-2" r="3" fill={I}/><circle cx="8" cy="-2" r="3" fill={I}/></g>
       : <g transform="translate(160 120)"><circle r="26" fill={C} stroke={I} stroke-width="2"/><path d="M-24-10c-8 4-6 20 0 24 4-6 4-16 2-22zM24-10c8 4 6 20 0 24-4-6-4-16-2-22z" fill={P}/><circle cx="-8" cy="-4" r="3" fill={I}/><circle cx="8" cy="-4" r="3" fill={I}/><ellipse cy="8" rx="5" ry="4" fill={I}/></g>}
+  </g>}
+  {name === 'rabbit' && <g>
+    <ellipse cx="124" cy="152" rx="46" ry="32" fill={C} stroke={I} stroke-width="2"/>
+    <path d="M104 78c-10-30-6-58 6-60 10 2 10 32 6 60zM132 78c2-30 12-56 24-54 8 6-2 34-12 58z" fill={C} stroke={I} stroke-width="2"/>
+    <path d="M108 74c-4-20-2-40 3-44 4 4 3 26 1 44zM138 74c4-20 10-36 15-38 2 6-4 24-10 40z" fill={P} opacity=".6"/>
+    <circle cx="120" cy="104" r="30" fill={C} stroke={I} stroke-width="2"/>
+    <circle cx="110" cy="100" r="4" fill={I}/><circle cx="132" cy="100" r="4" fill={I}/>
+    <path d="M117 112l4 4 4-4z" fill={P}/><path d="M121 116v5" stroke={I} stroke-width="1.6"/>
+    <circle cx="170" cy="160" r="9" fill={C} stroke={I} stroke-width="2"/>
+    <path d="M60 182h40" stroke="#3E9A55" stroke-width="5" stroke-linecap="round"/><path d="M70 182q-4-16 6-24M84 182q2-14 12-18" stroke="#3E9A55" stroke-width="4" fill="none" stroke-linecap="round"/>
   </g>}
   {name === 'vaccine' && <g>
     <rect x="70" y="100" width="100" height="30" rx="8" fill={C} stroke={I} stroke-width="3" transform="rotate(-30 120 115)"/>

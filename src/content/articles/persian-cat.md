@@ -6,7 +6,7 @@ category: cats
 date: 2026-10-07
 illustration: cat
 health: true
-tools: [cat-age]
+tools: [cat-age, food-calculator]
 related: [scottish-fold-cat, cat-food-homemade]
 faq:
   - q: "گربه پرشین چند سال عمر می‌کند؟"

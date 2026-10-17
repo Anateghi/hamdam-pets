@@ -4,7 +4,8 @@ import Illo from '../../components/Illo.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIES } from '../../lib/site';
-export function getStaticPaths() { return Object.keys(CATEGORIES).map((category) => ({ params: { category } })); }
+// Only categories that already have articles get a page (avoids thin/empty pages, e.g. small-pets until its first article).
+export async function getStaticPaths() { const all = await getCollection('articles'); return Object.keys(CATEGORIES).filter((k) => all.some((a) => a.data.category === k)).map((category) => ({ params: { category } })); }
 const { category } = Astro.params;
 const c = CATEGORIES[category!];
 const list = (await getCollection('articles', (a) => a.data.category === category)).sort((a, b) => +b.data.date - +a.data.date);
@@ -16,8 +17,8 @@ const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', it
   <div class="wrap">
     <nav class="crumbs"><a href="/">خانه</a> › {c.title}</nav>
     <div style="display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:center"><div><h1>{c.title}</h1><p>{c.blurb}</p></div><Illo name={c.icon} /></div>
-    {category === 'cats' && <p class="vet" style="background:#fff;border-color:#e3d6bd;border-inline-start-color:var(--saffron)">ابزار پیشنهادی: <a href="/tools/cat-age/">محاسبه سن گربه به انسان</a></p>}
-    {category === 'dogs' && <p class="vet" style="background:#fff;border-color:#e3d6bd;border-inline-start-color:var(--saffron)">ابزار پیشنهادی: <a href="/tools/dog-age/">محاسبه سن سگ به انسان</a></p>}
+    {category === 'cats' && <p class="vet" style="background:#fff;border-color:#e3d6bd;border-inline-start-color:var(--saffron)">ابزارهای پیشنهادی: <a href="/tools/food-calculator/">محاسبه مقدار غذای گربه</a> · <a href="/tools/cat-age/">محاسبه سن گربه به انسان</a></p>}
+    {category === 'dogs' && <p class="vet" style="background:#fff;border-color:#e3d6bd;border-inline-start-color:var(--saffron)">ابزارهای پیشنهادی: <a href="/tools/food-calculator/">محاسبه مقدار غذای سگ</a> · <a href="/tools/dog-age/">محاسبه سن سگ به انسان</a></p>}
     <div class="grid" style="margin:24px 0 40px">{list.map((a) => <ArticleCard a={a} />)}</div>
   </div>
 </Base>
