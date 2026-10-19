@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import Illo from '../components/Illo.astro';
 import Faq from '../components/Faq.astro';
 import VetNote from '../components/VetNote.astro';
+import Reactions from '../components/Reactions.astro';
 import { SITE } from '../lib/site';
 const { title, h1, description, slug, illo, faq, links } = Astro.props;
 const url = new URL(Astro.url.pathname, Astro.site).href;
@@ -25,6 +26,7 @@ const schema = [
         <slot />
         <Faq items={faq} />
         <VetNote />
+        <Reactions title="این ابزار" />
       </div>
       <aside class="side">
         <Illo name={illo} class="sideillo" />

@@ -1,0 +1,56 @@
+---
+// Likes + anonymous comments. Everything dynamic is loaded with fetch so the page stays static.
+const { title = 'این صفحه' } = Astro.props;
+---
+<section class="react" id="reactions" aria-labelledby="react-h">
+  <h2 id="react-h">نظر شما چیست؟</h2>
+  <p style="margin:0 0 10px"><button type="button" class="likebtn" id="likebtn" aria-pressed="false" disabled><span aria-hidden="true">♥</span> <span id="liketxt">پسندیدم</span> <span id="likecount" class="meta" style="color:inherit"></span></button></p>
+  <form class="cform" id="cform" novalidate>
+    <label for="cname">نام شما</label>
+    <input id="cname" name="name" maxlength="40" required autocomplete="nickname" placeholder="مثلاً مریم" />
+    <label for="cbody">نظر یا تجربهٔ شما دربارهٔ {title}</label>
+    <textarea id="cbody" name="body" rows="4" maxlength="1000" required placeholder="تجربه یا سؤالتان را بنویسید…"></textarea>
+    <div class="hp" aria-hidden="true"><label for="cweb">وب‌سایت (خالی بگذارید)</label><input id="cweb" name="website" tabindex="-1" autocomplete="off" /></div>
+    <button class="btn" type="submit" id="csend">ارسال نظر</button>
+    <p class="msg" id="cmsg" role="status"></p>
+    <p class="meta" style="margin:4px 0 0">نیازی به ثبت‌نام نیست. گذاشتن لینک و کلمات نامناسب مجاز نیست. نظرها جایگزین مشاورهٔ دامپزشک نیستند.</p>
+  </form>
+  <h3 id="ccount" style="margin-bottom:0">نظرها</h3>
+  <ul class="clist" id="clist"><li class="meta">در حال بارگذاری…</li></ul>
+</section>
+<script>
+  const fa = (v: string | number) => String(v).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[+d]);
+  const page = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+  const $ = (id: string) => document.getElementById(id) as any;
+  const started = Date.now();
+  let vid = '';
+  try { vid = localStorage.getItem('hamdam-vid') || ''; if (!vid) { vid = (crypto.randomUUID ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, '0')).join('')); localStorage.setItem('hamdam-vid', vid); } } catch { vid = Math.random().toString(36).slice(2) + Date.now().toString(36) + 'xxxxxxxx'; }
+  const fmt = (ms: number) => new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(ms));
+  function setLike(n: number, liked: boolean) { const b = $('likebtn'); b.disabled = false; b.setAttribute('aria-pressed', String(liked)); $('liketxt').textContent = liked ? 'پسندیدید' : 'پسندیدم'; $('likecount').textContent = '(' + fa(n) + ')'; b.dataset.count = String(n); }
+  function item(c: any) { const li = document.createElement('li'); li.dataset.id = String(c.id); const who = document.createElement('span'); who.className = 'who'; who.textContent = c.name; const t = document.createElement('time'); t.dateTime = new Date(c.created_at).toISOString(); t.textContent = fmt(c.created_at); const p = document.createElement('p'); p.textContent = c.body; li.append(who, t, p); return li; }
+  function render(list: any[], count: number) { const ul = $('clist'); ul.innerHTML = ''; $('ccount').textContent = count ? 'نظرها (' + fa(count) + ')' : 'نظرها'; if (!list.length) { const li = document.createElement('li'); li.className = 'meta'; li.textContent = 'هنوز نظری ثبت نشده است. اولین نفر باشید!'; ul.appendChild(li); return; } list.forEach((c) => ul.appendChild(item(c))); }
+  let comments: any[] = [], total = 0;
+  fetch('/api/reactions?page=' + encodeURIComponent(page) + '&vid=' + encodeURIComponent(vid), { cache: 'no-store' }).then((r) => r.ok ? r.json() : Promise.reject(r)).then((d) => { setLike(d.likes, d.liked); comments = d.comments; total = d.count; render(comments, total); }).catch(() => { $('clist').innerHTML = '<li class="meta">بارگذاری نظرها ممکن نشد. کمی بعد دوباره سر بزنید.</li>'; });
+  $('likebtn').addEventListener('click', async () => {
+    const b = $('likebtn'), want = b.getAttribute('aria-pressed') !== 'true', n = +(b.dataset.count || 0); b.disabled = true;
+    setLike(Math.max(0, n + (want ? 1 : -1)), want); b.disabled = true;
+    try { const r = await fetch('/api/like', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page, vid, like: want }) }); const d = await r.json(); if (!r.ok) throw new Error(d.error); setLike(d.likes, d.liked); }
+    catch (e: any) { setLike(n, !want); $('cmsg').className = 'msg err'; $('cmsg').textContent = e?.message || 'ثبت پسند ممکن نشد.'; }
+  });
+  $('cform').addEventListener('submit', async (e: Event) => {
+    e.preventDefault(); const msg = $('cmsg'), name = $('cname').value.trim(), body = $('cbody').value.trim();
+    msg.className = 'msg err';
+    if (name.length < 2) { msg.textContent = 'نام خود را بنویسید (دست‌کم ۲ نویسه).'; return; }
+    if (body.length < 3) { msg.textContent = 'متن نظر خیلی کوتاه است.'; return; }
+    $('csend').disabled = true; msg.className = 'msg'; msg.textContent = 'در حال ارسال…';
+    try {
+      const r = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page, name, body, website: $('cweb').value, t: Date.now() - started }) });
+      const d = await r.json(); if (!r.ok) throw new Error(d.error || 'خطا');
+      if (d.comment) { comments.unshift(d.comment); total++; render(comments, total); }
+      $('cbody').value = ''; msg.className = 'msg ok'; msg.textContent = 'نظر شما ثبت شد. ممنون!';
+      try { localStorage.setItem('hamdam-name', name); } catch {}
+    } catch (err: any) { msg.className = 'msg err'; msg.textContent = err?.message || 'ارسال ممکن نشد.'; }
+    finally { $('csend').disabled = false; }
+  });
+  try { const n = localStorage.getItem('hamdam-name'); if (n) $('cname').value = n; } catch {}
+</script>

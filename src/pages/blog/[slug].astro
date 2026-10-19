@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Illo from '../../components/Illo.astro';
 import Faq from '../../components/Faq.astro';
 import VetNote from '../../components/VetNote.astro';
+import Reactions from '../../components/Reactions.astro';
 import { getCollection, render } from 'astro:content';
 import { CATEGORIES, SITE, jalali, fa } from '../../lib/site';
 import { TOOLS } from '../../lib/tools';
@@ -39,6 +40,7 @@ if (d.faq.length) schema.push({ '@context': 'https://schema.org', '@type': 'FAQP
         <Content />
         <Faq items={d.faq} />
         <VetNote />
+        <Reactions title="این مطلب" />
       </article>
       <aside class="side">
         {tools.map((t) => <div class="toolbox"><h3>ابزار رایگان</h3><p>{t.blurb}</p><a class="btn" href={`/tools/${t.slug}/`}>{t.title}</a></div>)}
