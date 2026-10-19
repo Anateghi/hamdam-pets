@@ -1,0 +1,116 @@
+---
+import Tool from '../../layouts/Tool.astro';
+import JalaliDate from '../../components/JalaliDate.astro';
+const faq = [
+  { q: 'برنامهٔ واکسن توله سگ از چه سنی شروع می‌شود؟', a: 'طبق راهنمای WSAVA، واکسن‌های اصلی (دیستمپر، آدنوویروس و پاروویروس) از ۶ تا ۸ هفتگی شروع می‌شوند و هر ۲ تا ۴ هفته تکرار می‌شوند تا توله به ۱۶ هفتگی یا بیشتر برسد. سپس یک یادآور در ۲۶ هفتگی (یا ۱۲ ماهگی) زده می‌شود.' },
+  { q: 'واکسن سه‌گانهٔ گربه کی زده می‌شود؟', a: 'واکسن سه‌گانه (FVRCP: پان‌لکوپنی، هرپس و کالیسی) هم از ۶ تا ۸ هفتگی شروع می‌شود و هر ۲ تا ۴ هفته تا ۱۶ هفتگی یا بیشتر تکرار می‌شود. یادآور در ۲۶ هفتگی یا ۱ سالگی است و پس از آن برای گربه‌های کم‌خطر معمولاً هر ۳ سال، و برای گربه‌های بیرون‌رو یا پانسیونی هرپس و کالیسی سالانه تکرار می‌شود.' },
+  { q: 'واکسن هاری سگ و گربه در چه سنی است؟', a: 'واکسن هاری معمولاً از ۱۲ هفتگی زده می‌شود و یک سال بعد یادآور دارد. دفعات بعدی به نوع واکسن (یک‌ساله یا سه‌ساله) و مقررات محلی بستگی دارد. در ایران هاری بومی است و واکسن آن برای سگ و گربه به‌شدت توصیه می‌شود.' },
+  { q: 'کرم‌زدایی توله و بچه‌گربه هر چند وقت یک بار است؟', a: 'طبق راهنمای ESCCAP و CAPC، توله‌ها از ۲ هفتگی و بچه‌گربه‌ها از ۳ هفتگی هر ۲ هفته یک بار تا حدود ۲ هفته پس از شیرگیری ضدانگل می‌گیرند، سپس ماهانه تا ۶ ماهگی. حیوان بالغ دست‌کم ۴ بار در سال یا طبق ارزیابی خطر دامپزشک ضدانگل می‌گیرد. نوع و دوز دارو را فقط دامپزشک تعیین می‌کند.' },
+  { q: 'اگر یکی از نوبت‌های واکسن عقب افتاده باشد چه کنم؟', a: 'نگران نباشید ولی منتظر هم نمانید. با دامپزشک تماس بگیرید؛ معمولاً اگر فاصله زیاد شده باشد، سری واکسن از نو یا با یک دوز اضافه ادامه پیدا می‌کند. این جدول فقط برنامهٔ استاندارد را از روی تاریخ تولد می‌سازد و سابقهٔ واکسن واقعی حیوان شما را نمی‌داند.' },
+  { q: 'آیا این جدول برای حیوانی که تاریخ تولدش را نمی‌دانم کاربرد دارد؟', a: 'برای حیوانات بالغی که سابقهٔ واکسن نامعلوم دارند، WSAVA معمولاً دو دوز واکسن اصلی با فاصلهٔ ۲ تا ۴ هفته و سپس یادآور را پیشنهاد می‌کند. در این حالت تاریخ تقریبی تولد را وارد کنید و برنامه را با دامپزشک تنظیم کنید.' },
+];
+const links = [['/blog/dog-vaccine-schedule/','جدول واکسن سگ (راهنمای کامل)'],['/blog/parvo-in-dogs/','بیماری پاروا در سگ'],['/blog/persian-cat/','راهنمای گربه پرشین'],['/blog/street-cat-food/','غذای گربه‌های خیابانی'],['/tools/pregnancy-calculator/','محاسبه زمان زایمان سگ و گربه'],['/tools/dog-age/','محاسبه سن سگ به انسان']];
+---
+<Tool title="جدول واکسن سگ و گربه با تاریخ شمسی (برنامه‌ساز رایگان)" h1="برنامه‌ساز واکسن و ضدانگل سگ و گربه" description="تاریخ تولد توله سگ یا بچه‌گربه را به شمسی وارد کنید و تقویم شخصی واکسن (DHPP، سه‌گانهٔ گربه، هاری) و ضدانگل را بر اساس راهنمای WSAVA ببینید؛ قابل چاپ و افزودن به تقویم." slug="vaccine-schedule" illo="vaccine" faq={faq} links={links}>
+  <div slot="calc" class="calc" id="vaccalc">
+    <h2 class="printonly" id="vprinttitle">برنامهٔ واکسن و ضدانگل</h2>
+    <div class="row">
+      <div><label for="vsp">حیوان</label><select id="vsp"><option value="dog">سگ (توله)</option><option value="cat">گربه (بچه‌گربه)</option></select></div>
+      <div><label for="vname">نام حیوان (اختیاری)</label><input id="vname" type="text" maxlength="30" placeholder="مثلاً پشمک" /></div>
+    </div>
+    <JalaliDate id="vbirth" label="تاریخ تولد (شمسی)" />
+    <label for="vstart">شروع واکسن‌ها</label>
+    <select id="vstart"><option value="8">۸ هفتگی (رایج)</option><option value="6">۶ هفتگی (زودتر، مثلاً در محیط پرخطر)</option></select>
+    <label class="chk"><input type="checkbox" id="vrab" checked /> واکسن هاری (در ایران به‌شدت توصیه می‌شود)</label>
+    <div id="vdogopts">
+      <label class="chk"><input type="checkbox" id="vlep" /> لپتوسپیروز (غیرپایه؛ تماس با آب راکد، جوندگان یا روستا)</label>
+      <label class="chk"><input type="checkbox" id="vken" /> سرفهٔ لانه (غیرپایه؛ پانسیون، پارک سگ، آرایشگاه)</label>
+    </div>
+    <div id="vcatopts" hidden>
+      <label class="chk"><input type="checkbox" id="vfelv" /> لوسمی گربه FeLV (AAFP برای همهٔ بچه‌گربه‌ها توصیه می‌کند)</label>
+      <label class="chk"><input type="checkbox" id="vout" /> گربه به بیرون رفت‌وآمد دارد یا به پانسیون می‌رود</label>
+    </div>
+    <div class="result" aria-live="polite"><div id="vhead">نوبت بعدی</div><div class="big" id="vnext">—</div><div class="sub" id="vsub"></div></div>
+    <div class="actions noprint"><button class="btn" type="button" id="vprint">چاپ / ذخیرهٔ PDF</button><button class="btn sec" type="button" id="vics">افزودن به تقویم (ics)</button></div>
+    <div style="overflow-x:auto"><table class="sched" id="vtable"><thead><tr><th>تاریخ (شمسی)</th><th>سن</th><th>نوبت</th><th>توضیح</th></tr></thead><tbody></tbody></table></div>
+    <p class="meta">رنگ‌ها: <span class="k">واکسن اصلی</span> <span class="k o">اختیاری/غیرپایه</span> <span class="k w">ضدانگل</span> · برنامهٔ نهایی را دامپزشک تعیین می‌کند.</p>
+  </div>
+  <p>یکی از اولین سؤال‌های هر کسی که توله سگ یا بچه‌گربه به خانه می‌آورد این است: «واکسن بعدی کی است؟». این ابزار با گرفتن <strong>تاریخ تولد به شمسی</strong>، یک تقویم شخصی از واکسن‌ها و نوبت‌های ضدانگل می‌سازد که می‌توانید چاپش کنید، به یخچال بچسبانید یا به تقویم گوشی اضافه کنید. مبنای آن راهنمای واکسیناسیون <strong>WSAVA ۲۰۲۴</strong> (انجمن جهانی دامپزشکی حیوانات کوچک)، راهنمای AAHA و AAFP، و توصیه‌های ضدانگل ESCCAP و CAPC است.</p>
+  <h2>واکسن‌های اصلی سگ و گربه کدام‌اند؟</h2>
+  <p>واکسن‌های «اصلی» (Core) آن‌هایی‌اند که همهٔ سگ‌ها یا گربه‌ها، صرف‌نظر از محل زندگی، باید بزنند، چون بیماری‌هایشان کشنده و گسترده است:</p>
+  <ul>
+    <li><strong>سگ:</strong> دیستمپر (CDV)، هپاتیت عفونی (آدنوویروس CAV-2) و پاروویروس (CPV-2)، که معمولاً در یک تزریق به نام DHPP یا DHP زده می‌شوند. دربارهٔ خطر پاروا در <a href="/blog/parvo-in-dogs/">مقالهٔ بیماری پاروا در سگ</a> بیشتر بخوانید.</li>
+    <li><strong>گربه:</strong> پان‌لکوپنی (FPV)، رینوتراکئیت ویروسی یا هرپس (FHV-1) و کالیسی‌ویروس (FCV)، که با نام واکسن سه‌گانه یا FVRCP شناخته می‌شوند.</li>
+    <li><strong>هاری:</strong> در کشورهایی مثل ایران که هاری بومی است، برای سگ و گربه هر دو در عمل اصلی محسوب می‌شود.</li>
+  </ul>
+  <h2>چرا توله و بچه‌گربه چند بار واکسن می‌زنند؟</h2>
+  <p>پادتن‌هایی که نوزاد از شیر اول مادر می‌گیرد، تا چند هفته از او محافظت می‌کند اما هم‌زمان جلوی اثر واکسن را هم می‌گیرد. زمان از بین رفتن این پادتن‌ها برای هر حیوان فرق دارد و گاهی تا ۱۶ هفتگی یا بیشتر طول می‌کشد. به همین دلیل دوزها هر ۲ تا ۴ هفته تکرار می‌شوند و آخرین دوز سری نباید زودتر از ۱۶ هفتگی باشد. WSAVA در راهنمای ۲۰۲۴ یک یادآور در <strong>۲۶ هفتگی</strong> پیشنهاد می‌کند تا حیواناتی که به دوزهای قبلی پاسخ نداده‌اند زودتر محافظت شوند؛ بسیاری از کلینیک‌ها هم این یادآور را در ۱۲ ماهگی می‌زنند. پس از آن واکسن‌های اصلی زنده معمولاً <strong>هر ۳ سال</strong> کافی‌اند.</p>
+  <h2>جدول خلاصهٔ واکسن توله سگ</h2>
+  <table><thead><tr><th>سن</th><th>نوبت</th></tr></thead><tbody>
+    <tr><td>۶ تا ۸ هفتگی</td><td>DHPP دوز اول (+ لپتو و سرفهٔ لانه در صورت نیاز)</td></tr>
+    <tr><td>۹ تا ۱۲ هفتگی</td><td>DHPP دوز بعدی؛ هاری از ۱۲ هفتگی</td></tr>
+    <tr><td>۱۶ هفتگی یا بیشتر</td><td>آخرین دوز سری توله‌گی DHPP</td></tr>
+    <tr><td>۲۶ هفتگی یا ۱ سالگی</td><td>یادآور DHPP؛ یادآور هاری یک سال پس از دوز اول</td></tr>
+    <tr><td>بزرگسالی</td><td>DHPP هر ۳ سال؛ هاری طبق مقررات؛ لپتو و سرفهٔ لانه سالانه</td></tr>
+  </tbody></table>
+  <p>جزئیات بیشتر، عوارض احتمالی و نکات قبل و بعد از واکسن را در <a href="/blog/dog-vaccine-schedule/">راهنمای کامل جدول واکسن سگ</a> آورده‌ایم.</p>
+  <h2>جدول خلاصهٔ واکسن بچه‌گربه</h2>
+  <table><thead><tr><th>سن</th><th>نوبت</th></tr></thead><tbody>
+    <tr><td>۶ تا ۸ هفتگی</td><td>FVRCP دوز اول؛ FeLV دوز اول از ۸ هفتگی (پس از تست)</td></tr>
+    <tr><td>۱۲ هفتگی</td><td>FVRCP دوز بعدی؛ FeLV دوز دوم؛ هاری</td></tr>
+    <tr><td>۱۶ هفتگی یا بیشتر</td><td>آخرین دوز سری FVRCP</td></tr>
+    <tr><td>۲۶ هفتگی یا ۱ سالگی</td><td>یادآور FVRCP؛ یادآور هاری و FeLV یک سال بعد</td></tr>
+    <tr><td>بزرگسالی</td><td>FVRCP هر ۳ سال (بیرون‌روها: هرپس و کالیسی سالانه)</td></tr>
+  </tbody></table>
+  <h2>برنامهٔ ضدانگل (کرم‌زدایی)</h2>
+  <p>انگل‌های گرد مثل توکسوکارا ممکن است از مادر به نوزاد منتقل شوند و برخی از آن‌ها برای انسان، به‌خصوص کودکان، هم خطرناک‌اند. ESCCAP توصیه می‌کند توله‌ها از ۲ هفتگی و بچه‌گربه‌ها از ۳ هفتگی هر ۲ هفته ضدانگل بگیرند تا ۲ هفته پس از شیرگیری، سپس ماهانه تا ۶ ماهگی، و حیوان بالغ دست‌کم ۴ بار در سال. گربه‌های آپارتمانی که شکار نمی‌کنند ممکن است به دفعات کمتری نیاز داشته باشند. <strong>این ابزار هیچ دارو یا دوزی پیشنهاد نمی‌کند</strong>؛ نوع ضدانگل و مقدار آن بر اساس وزن را دامپزشک تعیین می‌کند. برای گربه‌های محله که غذا می‌دهید هم <a href="/blog/street-cat-food/">راهنمای غذای گربه‌های خیابانی</a> را ببینید.</p>
+  <h2>نکته‌های عملی روز واکسن</h2>
+  <ul>
+    <li>حیوان باید سالم باشد؛ اگر تب، اسهال یا بی‌حالی دارد، واکسن را با نظر دامپزشک عقب بیندازید.</li>
+    <li>دفترچهٔ واکسن را همیشه همراه ببرید و نام واکسن و شمارهٔ سری آن را ثبت کنید.</li>
+    <li>تا دو هفته پس از آخرین دوز سری توله‌گی، توله را به پارک یا جاهایی که سگ‌های ناشناس رفت‌وآمد دارند نبرید.</li>
+    <li>بی‌حالی خفیف یک روزه عادی است؛ تورم صورت، استفراغ، کهیر یا تنگی نفس نیاز به مراجعهٔ فوری دارد.</li>
+  </ul>
+  <script>
+    import { jalaliPicker, fmtJ, fa, today, addDays, daysBetween } from '../../scripts/jalali.js';
+    import { buildSchedule } from '../../scripts/vaccine.js';
+    const $ = (id) => document.getElementById(id);
+    const pick = jalaliPicker($('vbirth'), addDays(today(), -42));
+    let events = [];
+    const KIND = { core: ['k', 'واکسن اصلی'], opt: ['k o', 'اختیاری'], worm: ['k w', 'ضدانگل'], check: ['k', 'معاینه'] };
+    function run() {
+      const sp = $('vsp').value; $('vdogopts').hidden = sp !== 'dog'; $('vcatopts').hidden = sp !== 'cat';
+      const b = pick.get(); const tb = $('vtable').querySelector('tbody');
+      if (!b || b > today()) { $('vnext').textContent = '—'; $('vsub').textContent = 'تاریخ تولد معتبر و گذشته را وارد کنید.'; tb.innerHTML = ''; events = []; return; }
+      events = buildSchedule(sp, b, { start: +$('vstart').value, rabies: $('vrab').checked, lepto: $('vlep').checked, kennel: $('vken').checked, felv: $('vfelv').checked, outdoor: $('vout').checked });
+      const t = today(); const up = events.find((e) => e.date >= t && e.kind !== 'worm') || null;
+      const age = daysBetween(b, t);
+      tb.innerHTML = '';
+      events.forEach((e) => {
+        const tr = document.createElement('tr'); if (e.date < t) tr.className = 'past'; else if (up && +e.date === +up.date) tr.className = 'next';
+        const k = KIND[e.kind];
+        tr.innerHTML = `<td>${fmtJ(e.date, true)}</td><td>${fa(e.label)}</td><td><span class="${k[0]}">${k[1]}</span> ${e.title}</td><td>${fa(e.note)}${e.date < t ? ' · <b>گذشته</b>' : ''}</td>`;
+        tb.appendChild(tr);
+      });
+      const name = $('vname').value.trim();
+      $('vprinttitle').textContent = 'برنامهٔ واکسن و ضدانگل ' + (name ? '«' + name + '» ' : '') + '(تولد: ' + fmtJ(b) + ')';
+      $('vhead').textContent = (name ? name + ' ' : '') + 'الان حدود ' + fa(age < 120 ? Math.floor(age / 7) + ' هفته' : Math.floor(age / 30.44) + ' ماه') + ' دارد · نوبت بعدی:';
+      if (up) { const dd = daysBetween(t, up.date); $('vnext').textContent = fmtJ(up.date); $('vsub').textContent = up.title + ' (' + (dd === 0 ? 'امروز' : fa(dd) + ' روز دیگر') + ')' + (events.some((e) => e.date < t && e.kind !== 'worm') ? ' · نوبت‌های گذشته را اگر انجام نشده با دامپزشک هماهنگ کنید.' : ''); }
+      else { $('vnext').textContent = 'سری اولیه تمام شده'; $('vsub').textContent = 'برای یادآورهای بعدی با دامپزشک هماهنگ کنید.'; }
+      $('vnext').dataset.date = up ? up.date.toISOString().slice(0, 10) : '';
+    }
+    function ics() {
+      const p = (n) => String(n).padStart(2, '0'); const d = (x) => x.getFullYear() + p(x.getMonth() + 1) + p(x.getDate());
+      const name = $('vname').value.trim();
+      const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Hamdam//Vaccine//FA', 'CALSCALE:GREGORIAN'];
+      events.filter((e) => e.date >= today()).forEach((e, i) => { lines.push('BEGIN:VEVENT', 'UID:hamdam-' + d(e.date) + '-' + i + '@hamdam', 'DTSTAMP:' + d(today()) + 'T000000Z', 'DTSTART;VALUE=DATE:' + d(e.date), 'DTEND;VALUE=DATE:' + d(addDays(e.date, 1)), 'SUMMARY:' + (name ? name + ': ' : '') + e.title, 'DESCRIPTION:' + e.note.replace(/[,;]/g, ' ') + ' - هماهنگی با دامپزشک', 'BEGIN:VALARM', 'TRIGGER:-P1D', 'ACTION:DISPLAY', 'DESCRIPTION:' + e.title, 'END:VALARM', 'END:VEVENT'); });
+      lines.push('END:VCALENDAR');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([lines.join('\r\n')], { type: 'text/calendar' })); a.download = 'hamdam-vaccine.ics'; a.click();
+    }
+    pick.onChange(run);
+    ['vsp', 'vstart', 'vrab', 'vlep', 'vken', 'vfelv', 'vout', 'vname'].forEach((id) => { $(id).addEventListener('change', run); $(id).addEventListener('input', run); });
+    $('vprint').addEventListener('click', () => window.print());
+    $('vics').addEventListener('click', ics);
+    run();
+  </script>
+</Tool>
