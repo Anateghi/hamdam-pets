@@ -1,0 +1,108 @@
+---
+import Tool from '../../layouts/Tool.astro';
+import JalaliDate from '../../components/JalaliDate.astro';
+const faq = [
+  { q: 'وزن ایده‌آل سگ یا گربه‌ام را از کجا بفهمم؟', a: 'بهترین معیار «امتیاز وضعیت بدنی» (BCS) است، نه فقط عدد ترازو. در مقیاس ۹ امتیازی WSAVA، امتیاز ۵ ایده‌آل است و هر امتیاز بالاتر از ۵ تقریباً ۱۰ درصد اضافه‌وزن نسبت به وزن ایده‌آل را نشان می‌دهد. پس سگی ۳۳ کیلویی با امتیاز ۷ حدود ۲۰ درصد اضافه‌وزن دارد و وزن ایده‌آلش حدود ۲۷٫۵ کیلوگرم است.' },
+  { q: 'امتیاز وضعیت بدنی (BCS) را چطور بسنجم؟', a: 'سه چیز را بررسی کنید: با کف دست روی دنده‌ها بکشید (باید بدون فشار حس شوند ولی دیده نشوند)، از بالا به کمر نگاه کنید (باید پشت دنده‌ها کمی باریک شود) و از پهلو به شکم نگاه کنید (باید رو به پاها بالا برود). در نژادهای پشمالو حتماً با لمس قضاوت کنید، نه با چشم.' },
+  { q: 'چرا وزن استاندارد نژاد برای حیوان من کافی نیست؟', a: 'بازهٔ وزن نژاد برای کل نژاد نوشته شده و قد و استخوان‌بندی هر حیوان فرق دارد. یک لابرادور ریزاندام ممکن است با ۲۵ کیلو چاق باشد و یک لابرادور درشت با ۳۴ کیلو ایده‌آل. برای همین این ابزار وزن ایده‌آل را از BCS حساب می‌کند و بازهٔ نژاد را فقط برای مقایسه نشان می‌دهد.' },
+  { q: 'کاهش وزن سگ و گربه باید با چه سرعتی باشد؟', a: 'معمولاً حدود ۱ تا ۲ درصد وزن بدن در هفته. در گربه‌ها کاهش وزن سریع یا گرسنگی چندروزه خطر بیماری کبد چرب (لیپیدوز کبدی) دارد، پس رژیم گربه را حتماً با نظارت دامپزشک شروع کنید.' },
+  { q: 'داده‌های نمودار وزن کجا ذخیره می‌شود؟', a: 'فقط در مرورگر خود شما (localStorage) و روی همین دستگاه. چیزی به سرور همدم فرستاده نمی‌شود؛ اگر حافظهٔ مرورگر را پاک کنید یا دستگاه دیگری استفاده کنید، نمودار خالی خواهد بود.' },
+];
+const links = [['/tools/food-calculator/','محاسبه مقدار غذای سگ و گربه'],['/blog/small-dog-breeds/','نژاد سگ‌های کوچک آپارتمانی'],['/blog/british-shorthair-cat/','گربه بریتیش شورت‌هیر'],['/blog/persian-cat/','راهنمای گربه پرشین'],['/blog/cat-food-homemade/','غذای گربه خانگی'],['/tools/dog-age/','محاسبه سن سگ به انسان']];
+---
+<Tool title="وزن ایده‌آل سگ و گربه + نمودار وزن (BCS)" h1="محاسبه وزن ایده‌آل و وضعیت بدنی سگ و گربه" description="آیا سگ یا گربهٔ شما چاق است؟ نژاد، وزن فعلی و امتیاز وضعیت بدنی (BCS) را وارد کنید تا وزن ایده‌آل، درصد اضافه‌وزن و برنامهٔ کاهش وزن ایمن را ببینید؛ همراه نمودار پیگیری وزن." slug="ideal-weight" illo="scale" faq={faq} links={links}>
+  <div slot="calc" class="calc" id="wcalc">
+    <div class="row">
+      <div><label for="wsp">حیوان</label><select id="wsp"><option value="dog">سگ</option><option value="cat">گربه</option></select></div>
+      <div><label for="wkg">وزن فعلی (کیلوگرم)</label><input id="wkg" type="text" inputmode="decimal" value="12" /></div>
+    </div>
+    <label for="wbr">نژاد یا اندازه</label><select id="wbr"></select>
+    <label id="bcslab">امتیاز وضعیت بدنی (BCS از ۱ تا ۹)</label>
+    <div class="bcs" role="group" aria-labelledby="bcslab" id="wbcs"></div>
+    <p class="meta" id="wbcsdesc" style="margin:6px 0 0"></p>
+    <div class="result" aria-live="polite"><div id="wstat">وضعیت</div><div class="big" id="wideal">—</div><div class="sub" id="wsub"></div><div class="sub" id="wbreed" style="margin-top:6px"></div></div>
+    <h3>نمودار پیگیری وزن</h3>
+    <div class="row">
+      <div><label for="wpet">نام حیوان</label><input id="wpet" type="text" maxlength="24" value="همدم من" /></div>
+      <div><label for="wkg2">وزن (کیلوگرم)</label><input id="wkg2" type="text" inputmode="decimal" /></div>
+    </div>
+    <JalaliDate id="wdate" label="تاریخ وزن‌کشی" />
+    <div class="actions"><button class="btn" type="button" id="wadd">ثبت وزن</button><button class="btn sec" type="button" id="wclear">پاک کردن داده‌های این حیوان</button></div>
+    <svg class="chart" id="wchart" viewBox="0 0 600 260" role="img" aria-label="نمودار وزن"></svg>
+    <ul id="wlist" class="meta" style="padding-inline-start:18px"></ul>
+    <p class="meta">داده‌ها فقط در مرورگر شما ذخیره می‌شوند.</p>
+  </div>
+  <p>چاقی شایع‌ترین بیماری تغذیه‌ای سگ‌ها و گربه‌های خانگی است و طبق برآوردهای انجمن پیشگیری از چاقی حیوانات خانگی (APOP)، بیش از نیمی از سگ‌ها و گربه‌ها در برخی کشورها اضافه‌وزن دارند. اضافه‌وزن خطر آرتروز، دیابت (به‌ویژه در گربه)، بیماری‌های تنفسی و کوتاه‌شدن عمر را بالا می‌برد. مشکل این است که بیشتر صاحبان حیوانات چاقی را تشخیص نمی‌دهند؛ چشم ما به حیوان تپل عادت می‌کند. این ابزار با ترکیب <strong>وزن فعلی</strong> و <strong>امتیاز وضعیت بدنی (BCS)</strong> وزن ایده‌آل تقریبی را حساب می‌کند و یک نمودار ساده برای پیگیری وزن در اختیارتان می‌گذارد.</p>
+  <h2>امتیاز وضعیت بدنی (BCS) چیست؟</h2>
+  <p>BCS یک مقیاس ۹ امتیازی است که انجمن جهانی دامپزشکی حیوانات کوچک (WSAVA) برای سگ و گربه منتشر کرده است. امتیاز ۱ تا ۳ لاغر، ۴ و ۵ ایده‌آل، ۶ و ۷ اضافه‌وزن و ۸ و ۹ چاق است. پژوهش‌ها نشان داده‌اند <strong>هر امتیاز بالاتر از ۵ تقریباً ۱۰ درصد</strong> وزن اضافه نسبت به وزن ایده‌آل است. ماشین‌حساب همدم از همین رابطه استفاده می‌کند: وزن ایده‌آل ≈ وزن فعلی ÷ (۱ + ۰٫۱ × (BCS − ۵)).</p>
+  <table><thead><tr><th>امتیاز</th><th>وضعیت</th><th>نشانه‌ها</th></tr></thead><tbody>
+    <tr><td>۱ تا ۳</td><td>لاغر</td><td>دنده‌ها، ستون مهره و استخوان لگن دیده می‌شوند؛ چربی لمس نمی‌شود.</td></tr>
+    <tr><td>۴ و ۵</td><td>ایده‌آل</td><td>دنده‌ها با لمس ملایم حس می‌شوند؛ کمر از بالا و فرورفتگی شکم از پهلو مشخص است.</td></tr>
+    <tr><td>۶ و ۷</td><td>اضافه‌وزن</td><td>دنده‌ها زیر لایهٔ چربی به‌سختی لمس می‌شوند؛ کمر کم‌رنگ یا ناپیدا است.</td></tr>
+    <tr><td>۸ و ۹</td><td>چاق</td><td>دنده‌ها لمس نمی‌شوند؛ چربی روی کمر و پایهٔ دم؛ شکم آویزان.</td></tr>
+  </tbody></table>
+  <h2>بازهٔ وزن نژادها فقط راهنماست</h2>
+  <p>بازه‌هایی که در فهرست نژادها می‌بینید از استانداردهای رسمی نژاد (AKC، FCI و انجمن‌های گربه مثل CFA و TICA) گرفته و برای نر و ماده با هم آورده شده‌اند. نرها معمولاً در نیمهٔ بالایی و ماده‌ها در نیمهٔ پایینی بازه‌اند. در گربه‌های <a href="/blog/british-shorthair-cat/">بریتیش شورت‌هیر</a> یا <a href="/blog/persian-cat/">پرشین</a> که پوشش موی پرپشتی دارند، چاقی با چشم دیده نمی‌شود و باید با لمس قضاوت کرد. سگ‌های ریزنقش هم با چند ده گرم غذای اضافه سریع چاق می‌شوند؛ نکاتش را در <a href="/blog/small-dog-breeds/">نژاد سگ‌های کوچک آپارتمانی</a> بخوانید.</p>
+  <h2>برنامهٔ کاهش وزن ایمن</h2>
+  <ul>
+    <li><strong>سرعت:</strong> حدود ۱ تا ۲ درصد وزن بدن در هفته. سریع‌تر از این، عضله از دست می‌رود و در گربه خطر کبد چرب وجود دارد.</li>
+    <li><strong>غذا:</strong> مقدار غذا را بر اساس وزن ایده‌آل (نه وزن فعلی) حساب کنید؛ از <a href="/tools/food-calculator/">ماشین‌حساب مقدار غذای سگ و گربه</a> با گزینهٔ «برنامهٔ کاهش وزن» استفاده کنید.</li>
+    <li><strong>تشویقی‌ها:</strong> کمتر از ۱۰ درصد کالری روزانه؛ تکه‌های غذای سفره را حذف کنید.</li>
+    <li><strong>وزن‌کشی:</strong> هر ۲ هفته یک بار، در ساعت ثابت و با ترازوی یکسان. برای سگ‌های کوچک و گربه‌ها، خودتان را با و بدون حیوان وزن کنید و تفاضل را ثبت کنید.</li>
+    <li><strong>تحرک:</strong> پیاده‌روی تدریجی برای سگ و بازی روزانه با اسباب‌بازی برای گربه.</li>
+  </ul>
+  <p>لاغری ناگهانی، به‌ویژه همراه با پرخوری، پرنوشی یا بی‌حالی، می‌تواند نشانهٔ بیماری‌هایی مثل دیابت، پرکاری تیروئید (در گربه‌های سالمند) یا انگل باشد و نیاز به معاینه دارد.</p>
+  <script>
+    import { jalaliPicker, fmtJ, fa, num, today, toJalali } from '../../scripts/jalali.js';
+    import { BREEDS, BCS, assess } from '../../scripts/weight.js';
+    const $ = (id) => document.getElementById(id);
+    let bcs = 5; const KEY = 'hamdam-weights-v1';
+    const dpick = jalaliPicker($('wdate'), today());
+    const f1 = (x) => fa(Math.round(x * 10) / 10);
+    $('wbcs').innerHTML = Array.from({ length: 9 }, (_, i) => `<button type="button" data-v="${i + 1}" aria-pressed="${i === 4}" title="${BCS[i + 1][0]}">${fa(i + 1)}</button>`).join('');
+    $('wbcs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; bcs = +b.dataset.v; $('wbcs').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); run(); });
+    function fillBreeds() { const sp = $('wsp').value; $('wbr').innerHTML = BREEDS[sp].map((b) => `<option value="${b[0]}">${b[1]}${b[2] ? ' (' + fa(b[2]) + ' تا ' + fa(b[3]) + ' کیلو)' : ''}</option>`).join(''); }
+    const LABEL = { under: 'لاغر', 'slightly-under': 'کمی زیر وزن ایده‌آل', ideal: 'وزن ایده‌آل', 'slightly-over': 'کمی اضافه‌وزن', over: 'اضافه‌وزن', obese: 'چاق' };
+    function run() {
+      const sp = $('wsp').value, kg = num($('wkg').value), br = BREEDS[sp].find((b) => b[0] === $('wbr').value);
+      $('wbcsdesc').textContent = fa(bcs) + ' — ' + BCS[bcs][0] + ': ' + BCS[bcs][1];
+      if (!(kg > 0.3 && kg < 120)) { $('wideal').textContent = '—'; $('wsub').textContent = 'وزن را بین ۰٫۳ تا ۱۲۰ کیلوگرم وارد کنید.'; $('wbreed').textContent = ''; return; }
+      const r = assess(sp, kg, bcs, br);
+      $('wstat').textContent = 'وضعیت: ' + LABEL[r.status] + ' · وزن ایده‌آل تقریبی';
+      $('wideal').textContent = f1(r.ideal) + ' کیلوگرم'; $('wideal').dataset.ideal = r.ideal.toFixed(2);
+      if (r.diffPct > 0.5) $('wsub').textContent = 'حدود ' + fa(Math.round(r.diffPct)) + '٪ (' + f1(kg - r.ideal) + ' کیلو) اضافه‌وزن · با کاهش ایمن ۱ تا ۲٪ در هفته، حدود ' + fa(r.weeks[0]) + ' تا ' + fa(r.weeks[1]) + ' هفته طول می‌کشد.' + (sp === 'cat' ? ' رژیم گربه فقط با نظارت دامپزشک.' : '');
+      else if (r.diffPct < -0.5) $('wsub').textContent = 'حدود ' + fa(Math.round(-r.diffPct)) + '٪ زیر وزن ایده‌آل · ' + (bcs <= 3 ? 'لاغری را با دامپزشک بررسی کنید (انگل، دندان، بیماری‌های متابولیک).' : 'کمی افزایش تدریجی غذا کافی است؛ هر ۲ هفته وزن کنید.');
+      else $('wsub').textContent = 'عالی! همین وزن و وضعیت را با وزن‌کشی منظم حفظ کنید.';
+      $('wbreed').textContent = !r.breedNote ? 'برای دورگه‌ها BCS معیار اصلی است.' : 'بازهٔ استاندارد نژاد: ' + fa(br[2]) + ' تا ' + fa(br[3]) + ' کیلو · وزن فعلی ' + (r.breedNote === 'within' ? 'در این بازه است' : r.breedNote === 'above' ? 'بالاتر از این بازه است' : 'پایین‌تر از این بازه است') + ' (بازهٔ نژاد جای BCS را نمی‌گیرد).';
+    }
+    // ---- tracking ----
+    const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+    const save = (d) => localStorage.setItem(KEY, JSON.stringify(d));
+    function draw() {
+      const all = load(), pet = $('wpet').value.trim() || 'همدم من', pts = (all[pet] || []).slice().sort((a, b) => a.d.localeCompare(b.d));
+      const svg = $('wchart'), list = $('wlist'); list.innerHTML = '';
+      if (!pts.length) { svg.innerHTML = '<text x="300" y="135" text-anchor="middle" font-size="16" fill="#5B6B73">هنوز وزنی ثبت نشده است</text>'; return; }
+      const ideal = parseFloat($('wideal').dataset.ideal || '0');
+      const t = pts.map((p) => +new Date(p.d + 'T12:00:00')), w = pts.map((p) => p.kg);
+      let lo = Math.min(...w, ideal || Infinity), hi = Math.max(...w, ideal || -Infinity); const pad = Math.max((hi - lo) * 0.15, 0.3); lo -= pad; hi += pad;
+      const t0 = Math.min(...t), t1 = Math.max(...t), X = (v) => t1 === t0 ? 300 : 560 - ((v - t0) / (t1 - t0)) * 500, Y = (v) => 220 - ((v - lo) / (hi - lo)) * 190;
+      let s = '';
+      for (let i = 0; i <= 4; i++) { const v = lo + ((hi - lo) * i) / 4; s += `<line x1="50" x2="580" y1="${Y(v)}" y2="${Y(v)}" stroke="#eee3cf"/><text x="575" y="${Y(v) - 3}" font-size="12" fill="#5B6B73" text-anchor="end">${f1(v)}</text>`; }
+      if (ideal) s += `<line x1="50" x2="580" y1="${Y(ideal)}" y2="${Y(ideal)}" stroke="#0F6E6B" stroke-dasharray="6 5" stroke-width="2"/><text x="55" y="${Y(ideal) - 5}" font-size="12" fill="#0F6E6B">ایده‌آل ${f1(ideal)}</text>`;
+      s += `<polyline fill="none" stroke="#E9A23B" stroke-width="3" points="${pts.map((p, i) => X(t[i]) + ',' + Y(p.kg)).join(' ')}"/>`;
+      pts.forEach((p, i) => { const j = toJalali(new Date(t[i])); s += `<circle cx="${X(t[i])}" cy="${Y(p.kg)}" r="5" fill="#C2513A"/><text x="${X(t[i])}" y="245" font-size="11" fill="#5B6B73" text-anchor="middle">${fa(j.jm + '/' + j.jd)}</text>`; });
+      svg.innerHTML = s;
+      pts.forEach((p, i) => { const li = document.createElement('li'); li.textContent = fmtJ(new Date(t[i])) + ': ' + f1(p.kg) + ' کیلو '; const x = document.createElement('button'); x.type = 'button'; x.textContent = 'حذف'; x.className = 'btn sec'; x.style.cssText = 'padding:0 10px;font-size:.8rem'; x.onclick = () => { const a = load(); a[pet] = (a[pet] || []).filter((q) => !(q.d === p.d && q.kg === p.kg)); save(a); draw(); }; li.appendChild(x); list.appendChild(li); });
+    }
+    $('wadd').addEventListener('click', () => {
+      const kg = num($('wkg2').value || $('wkg').value), d = dpick.get(); if (!(kg > 0.1 && kg < 120) || !d) { alert('وزن و تاریخ را درست وارد کنید.'); return; }
+      const pet = $('wpet').value.trim() || 'همدم من', all = load(), iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      all[pet] = (all[pet] || []).filter((p) => p.d !== iso).concat({ d: iso, kg: Math.round(kg * 100) / 100 }); save(all); $('wkg2').value = ''; draw();
+    });
+    $('wclear').addEventListener('click', () => { const pet = $('wpet').value.trim() || 'همدم من'; if (!confirm('همهٔ وزن‌های «' + pet + '» پاک شود؟')) return; const a = load(); delete a[pet]; save(a); draw(); });
+    $('wsp').addEventListener('change', () => { fillBreeds(); run(); draw(); });
+    ['wkg', 'wbr'].forEach((id) => { $(id).addEventListener('input', () => { run(); draw(); }); $(id).addEventListener('change', () => { run(); draw(); }); });
+    $('wpet').addEventListener('input', draw);
+    fillBreeds(); run(); draw();
+  </script>
+</Tool>

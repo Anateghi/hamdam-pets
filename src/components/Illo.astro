@@ -1,5 +1,5 @@
 ---
-// Custom flat illustrations (brand palette). name: cat | dog | bird | parrot | fish | cat-age | dog-age | food | vaccine | rabbit
+// Custom flat illustrations (brand palette). name: cat | dog | bird | parrot | fish | cat-age | dog-age | food | vaccine | rabbit | scale | toxic | quiz
 const { name = 'cat', class: cls = '' } = Astro.props;
 const T='#0F6E6B', S='#E9A23B', P='#C2513A', I='#1E2A32', C='#FBF6EC', M='#9CC9C1';
 ---
@@ -76,5 +76,23 @@ const T='#0F6E6B', S='#E9A23B', P='#C2513A', I='#1E2A32', C='#FBF6EC', M='#9CC9C
     <ellipse cx="120" cy="140" rx="60" ry="12" fill="#8C3A2B"/>
     {[90,104,118,132,146,110,126].map((x,i) => <circle cx={x} cy={i>4 ? 128 : 136} r="7" fill={S}/>)}
     <path d="M100 70c0-14 20-14 20 0 0-14 20-14 20 0 0 16-20 26-20 30 0-4-20-14-20-30z" fill={P} opacity=".8"/>
+  </g>}
+  {name === 'scale' && <g>
+    <rect x="62" y="150" width="116" height="30" rx="10" fill={T}/>
+    <circle cx="120" cy="165" r="9" fill={C}/><path d="M120 165l5-6" stroke={I} stroke-width="2"/>
+    <ellipse cx="120" cy="128" rx="40" ry="24" fill={S}/><circle cx="120" cy="96" r="22" fill={S}/>
+    <path d="M102 82l2-16 12 10zM138 82l-2-16-12 10z" fill={S}/><circle cx="112" cy="95" r="3" fill={I}/><circle cx="128" cy="95" r="3" fill={I}/><path d="M117 103l3 2 3-2z" fill={P}/>
+    <path d="M160 132q22-6 18-30" stroke={S} stroke-width="9" fill="none" stroke-linecap="round"/>
+  </g>}
+  {name === 'toxic' && <g>
+    <path d="M120 40l66 116H54z" fill={S} stroke={I} stroke-width="4" stroke-linejoin="round"/>
+    <path d="M120 84v36" stroke={I} stroke-width="10" stroke-linecap="round"/><circle cx="120" cy="138" r="6" fill={I}/>
+    <rect x="150" y="150" width="44" height="30" rx="6" fill="#6B3E26"/><path d="M161 150v30M172 150v30M183 150v30M150 165h44" stroke="#4A2A18" stroke-width="2"/>
+    <circle cx="62" cy="168" r="10" fill="#7B4A8C"/><circle cx="76" cy="162" r="10" fill="#7B4A8C"/><circle cx="70" cy="176" r="10" fill="#7B4A8C"/><path d="M70 152l4-8" stroke="#3E9A55" stroke-width="3"/>
+  </g>}
+  {name === 'quiz' && <g>
+    <circle cx="120" cy="110" r="56" fill={C} stroke={T} stroke-width="5"/>
+    <path d="M100 94c0-14 10-22 22-22s22 8 22 20c0 16-20 16-20 32" stroke={P} stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="124" cy="146" r="7" fill={P}/>
+    <path d="M178 60l6 12 13 2-9 9 2 13-12-6-12 6 2-13-9-9 13-2z" fill={S}/>
   </g>}
 </svg>
