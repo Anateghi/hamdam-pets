@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import { SITE } from '../lib/site';
+import { TOOLS } from '../lib/tools';
 interface Props { title: string; description: string; type?: 'website' | 'article'; schema?: object[]; image?: string; noSuffix?: boolean }
 const { title, description, type = 'website', schema = [], image = '/og.png', noSuffix = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -43,7 +44,7 @@ const nav = [['/cats/','گربه'],['/dogs/','سگ'],['/birds/','پرندگان'
   <footer class="foot"><div class="wrap">
     <div class="cols">
       <div><b class="display" style="font-size:1.6rem;color:#fff">{SITE.name}</b><p>{SITE.description}</p></div>
-      <div><b>ابزارهای رایگان</b><br/><a href="/tools/food-calculator/">محاسبه مقدار غذای سگ و گربه</a><br/><a href="/tools/cat-age/">محاسبه سن گربه به انسان</a><br/><a href="/tools/dog-age/">محاسبه سن سگ به انسان</a></div>
+      <div><b>ابزارهای رایگان</b>{TOOLS.map((t) => <><br/><a href={`/tools/${t.slug}/`}>{t.short}</a></>)}<br/><a href="/tools/">همهٔ ابزارها</a></div>
       <div><b>دسته‌ها</b><br/><a href="/cats/">گربه</a> · <a href="/dogs/">سگ</a> · <a href="/birds/">پرندگان</a> · <a href="/fish/">ماهی</a><br/><a href="/about/">دربارهٔ همدم</a></div>
     </div>
     <p style="margin-top:24px;opacity:.8">مطالب همدم جنبهٔ آموزشی دارد و جایگزین معاینه و تشخیص دامپزشک نیست.</p>

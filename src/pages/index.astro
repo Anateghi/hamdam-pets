@@ -14,7 +14,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
       <span class="tag" style="background:#ffffff22;color:#fff">راهنمای مستقل و رایگان</span>
       <h1>هر آنچه برای یک همدمِ سالم و شاد باید بدانید</h1>
       <p>مقاله‌های دقیق دربارهٔ گربه، سگ، پرنده و ماهی، نوشته‌شده با احتیاط علمی، به‌همراه ابزارهای رایگانی که جواب سؤال‌های روزمره‌تان را در چند ثانیه می‌دهند.</p>
-      <p><a class="btn" href="/tools/cat-age/">سن گربه‌ام به انسان چقدر است؟</a> <a class="btn ghost" href="/tools/food-calculator/">روزی چند گرم غذا بدهم؟</a></p>
+      <p><a class="btn" href="/tools/vaccine-schedule/">واکسن بعدی کی است؟</a> <a class="btn ghost" href="/tools/toxic-foods/">این خوراکی سمی است؟</a> <a class="btn ghost" href="/tools/pet-quiz/">کدام حیوان مناسب من است؟</a></p>
     </div>
     <Illo name="cat" />
   </div></section>
@@ -24,6 +24,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   </div></section>
   <section class="block tools-band"><div class="wrap">
     <h2>ابزارهای رایگان همدم</h2>
+    <p class="meta" style="margin-top:-6px">ماشین‌حساب‌ها و راهنماهای تعاملی، رایگان و بدون ثبت‌نام؛ با تاریخ شمسی.</p>
     <div class="grid">{TOOLS.map((t) => <a class="card" href={`/tools/${t.slug}/`}><Illo name={t.illo} /><h3>{t.title}</h3><p>{t.blurb}</p></a>)}</div>
   </div></section>
   <section class="block"><div class="wrap">
