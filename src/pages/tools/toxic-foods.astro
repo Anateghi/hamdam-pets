@@ -1,0 +1,87 @@
+---
+import Tool from '../../layouts/Tool.astro';
+import { FOODS, VLABEL, VCLASS } from '../../lib/foods';
+const sev = (f: any) => ['dog', 'cat', 'bird'].reduce((s, k) => s + (f[k] === 't' ? 10 : f[k] === 'c' ? 1 : 0), 0);
+const foods = [...FOODS].sort((a, b) => sev(b) - sev(a) || a.n.localeCompare(b.n, 'fa'));
+const faq = [
+  { q: 'خطرناک‌ترین خوراکی‌ها برای سگ و گربه کدام‌اند؟', a: 'طبق مرکز کنترل مسمومیت حیوانات ASPCA، شکلات و کافئین، انگور و کشمش، پیاز و سیر و تره، زایلیتول (شیرین‌کنندهٔ آدامس‌های بدون قند)، الکل، خمیر نان خام، ماکادمیا (برای سگ) و استخوان پخته از مهم‌ترین موارد مسمومیت یا آسیب‌اند. برای پرندگان، آووکادو، کافئین، شکلات، نمک و پیاز و سیر از همه خطرناک‌ترند.' },
+  { q: 'سگم شکلات خورده؛ چه کنم؟', a: 'نوع شکلات (تلخ، شیری یا پودر کاکائو)، مقدار تقریبی، زمان خوردن و وزن سگ را یادداشت کنید و همین حالا با دامپزشک یا کلینیک شبانه‌روزی تماس بگیرید. منتظر بروز علائم نمانید و بدون دستور دامپزشک حیوان را وادار به استفراغ نکنید؛ روش‌های خانگی مثل آب‌نمک خودشان خطرناک‌اند.' },
+  { q: 'آیا گربه می‌تواند شیر بخورد؟', a: 'بیشتر گربه‌های بالغ پس از شیرگیری لاکتاز کافی ندارند و شیر گاو در آن‌ها باعث اسهال و نفخ می‌شود. بچه‌گربهٔ یتیم هم باید شیر خشک مخصوص بچه‌گربه بخورد، نه شیر گاو. آب تازه بهترین نوشیدنی گربه است.' },
+  { q: 'چه میوه‌هایی برای طوطی و مرغ عشق خوب است؟', a: 'سیب و گلابی (بدون دانه)، انار، پرتقال، موز، توت‌فرنگی، انبه، هندوانه و طالبی در مقدار کم، همراه سبزیجاتی مثل هویج، فلفل دلمه‌ای، کدو و بروکلی. میوه حداکثر بخش کوچکی از جیره است و پایهٔ تغذیهٔ پرنده باید پلت مخصوص و سبزیجات باشد. آووکادو و هستهٔ میوه‌ها را هرگز ندهید.' },
+  { q: '«مجاز» در این فهرست یعنی چه؟', a: 'یعنی آن خوراکی سمی شناخته نشده و اگر ساده (بدون نمک، شکر، روغن، پیاز، سیر و ادویه)، تمیز و در مقدار کم داده شود، برای بیشتر حیوانات سالم بی‌خطر است. تشویقی‌ها روی هم نباید بیش از ۱۰ درصد کالری روزانه باشند و هر حیوانی ممکن است حساسیت فردی یا بیماری‌ای داشته باشد که رژیم خاصی لازم کند.' },
+  { q: 'این اطلاعات از کجا آمده است؟', a: 'از منابع شناخته‌شدهٔ دامپزشکی: فهرست «خوراکی‌های انسانی که نباید به حیوانات بدهید» مرکز کنترل مسمومیت ASPCA، Pet Poison Helpline، کتاب دامپزشکی Merck (بخش سم‌شناسی)، مقالات بیمارستان‌های دامپزشکی VCA و انجمن کنل آمریکا (AKC)، و برای پرندگان منابع انجمن دامپزشکان پرندگان (AAV) و LafeberVet. در مواردی که منابع اختلاف داشتند یا داده کافی نبود، حکم محتاطانه‌تر را آورده‌ایم.' },
+];
+const links = [['/blog/cat-food-homemade/','غذای گربه خانگی'],['/blog/street-cat-food/','غذای گربه‌های خیابانی'],['/blog/budgie-lifespan/','مرغ عشق چند سال عمر می‌کند'],['/blog/cockatiel/','عروس هلندی'],['/blog/brazilian-parrot-lovebird/','طوطی برزیلی'],['/tools/food-calculator/','محاسبه مقدار غذای سگ و گربه']];
+---
+<Tool title="چه غذاهایی برای سگ، گربه و پرنده سمی است؟ (جستجوی خوراکی)" h1="این خوراکی برای حیوانم مجاز است؟" description={`فهرست قابل جستجوی ${FOODS.length} خوراکی رایج با حکم مجاز، با احتیاط یا سمی برای سگ، گربه و پرنده؛ از شکلات و انگور تا پیاز، آووکادو و انار، بر اساس منابع ASPCA و Merck.`} slug="toxic-foods" illo="toxic" faq={faq} links={links}>
+  <div slot="calc" class="calc" id="fcalc">
+    <label for="fq">نام خوراکی را جستجو کنید</label>
+    <input id="fq" type="search" placeholder="مثلاً شکلات، انگور، پیاز، موز…" autocomplete="off" />
+    <div class="chips" role="group" aria-label="حیوان" id="fsp"><button type="button" data-sp="all" aria-pressed="true">همه</button><button type="button" data-sp="dog" aria-pressed="false">سگ</button><button type="button" data-sp="cat" aria-pressed="false">گربه</button><button type="button" data-sp="bird" aria-pressed="false">پرنده</button></div>
+    <div class="chips" role="group" aria-label="حکم" id="fv"><button type="button" data-v="all" aria-pressed="true">همهٔ حکم‌ها</button><button type="button" data-v="t" aria-pressed="false">فقط سمی</button><button type="button" data-v="c" aria-pressed="false">با احتیاط</button><button type="button" data-v="s" aria-pressed="false">مجاز</button></div>
+    <p class="meta" id="fcount" aria-live="polite"></p>
+    <div class="foods" id="flist">
+      {foods.map((f) => (
+        <div class="food" data-name={f.n + ' ' + f.a + ' ' + f.g} data-dog={f.dog} data-cat={f.cat} data-bird={f.bird}>
+          <h3>{f.n}</h3>
+          <div class="vv">
+            <span class={`badge ${VCLASS[f.dog]}`} data-for="dog">سگ: {VLABEL[f.dog]}</span>
+            <span class={`badge ${VCLASS[f.cat]}`} data-for="cat">گربه: {VLABEL[f.cat]}</span>
+            <span class={`badge ${VCLASS[f.bird]}`} data-for="bird">پرنده: {VLABEL[f.bird]}</span>
+          </div>
+          <p>{f.why}</p>
+        </div>
+      ))}
+    </div>
+    <p class="meta" id="fnone" hidden>چیزی پیدا نشد. اگر حیوان شما چیز ناشناخته‌ای خورده، با دامپزشک تماس بگیرید.</p>
+  </div>
+  <p>هر سال هزاران سگ، گربه و پرنده به خاطر خوردن غذای سفرهٔ ما راهی کلینیک می‌شوند. بسیاری از خوراکی‌هایی که برای ما سالم‌اند، مثل پیاز، سیر، انگور یا آووکادو، برای حیوانات خانگی سمی‌اند و برخی دیگر فقط در مقدار کم و به‌شکل ساده مجازند. در این ابزار <strong>{FOODS.length} خوراکی رایج</strong> در آشپزخانه‌های ایرانی را با حکم جداگانه برای سگ، گربه و پرنده آورده‌ایم. اطلاعات از منابع معتبر دامپزشکی مثل <strong>ASPCA</strong>، <strong>Pet Poison Helpline</strong>، <strong>کتاب دامپزشکی Merck</strong> و منابع انجمن دامپزشکان پرندگان گرفته شده است.</p>
+  <h2>سه حکم این فهرست یعنی چه؟</h2>
+  <ul>
+    <li><span class="badge v-toxic">سمی؛ هرگز ندهید</span> حتی مقدار کم می‌تواند مسمومیت یا آسیب جدی ایجاد کند. اگر حیوان خورده، فوراً با دامپزشک تماس بگیرید.</li>
+    <li><span class="badge v-caution">با احتیاط / بهتر است ندهید</span> سمیت شدید ندارد، اما چربی، نمک، قند یا خطر گیر کردن دارد، یا دادهٔ کافی دربارهٔ آن نیست. بهتر است ندهید یا فقط خیلی کم.</li>
+    <li><span class="badge v-safe">مجاز (کم و ساده)</span> سمی شناخته نشده است؛ ساده، شسته، بدون ادویه و در حد تشویقی (کمتر از ۱۰ درصد کالری روزانه).</li>
+  </ul>
+  <h2>خطرناک‌ترین خوراکی‌ها برای سگ و گربه</h2>
+  <p><strong>شکلات</strong> تئوبرومین دارد که سگ‌ها آن را بسیار کند دفع می‌کنند؛ هرچه تلخ‌تر، خطرناک‌تر. <strong>انگور و کشمش</strong> در برخی سگ‌ها با چند دانه نارسایی کلیه می‌دهند و نمی‌توان پیش‌بینی کرد کدام سگ حساس است. <strong>پیاز، سیر و تره</strong>، چه خام چه پخته یا پودرشده، گلبول‌های قرمز را تخریب می‌کنند و گربه‌ها از سگ‌ها حساس‌ترند؛ پس آب خورش و غذای پخته با پیاز را هم به آن‌ها ندهید. <strong>زایلیتول</strong> در آدامس‌های بدون شکر، برخی کره‌های بادام زمینی و شیرینی‌های رژیمی، در سگ‌ها افت شدید قند و آسیب کبدی ایجاد می‌کند. <strong>استخوان پخته</strong>، به‌ویژه استخوان مرغ، تکه‌تکه می‌شود و ممکن است روده را سوراخ کند.</p>
+  <h2>غذاهای ممنوع برای پرندگان</h2>
+  <p>پرندگان جثهٔ کوچک و متابولیسم سریعی دارند، پس سمیت در آن‌ها خیلی زود ظاهر می‌شود. <strong>آووکادو</strong> به دلیل پرسین برای طوطی‌سانان، از جمله <a href="/blog/budgie-lifespan/">مرغ عشق</a>، <a href="/blog/cockatiel/">عروس هلندی</a> و <a href="/blog/brazilian-parrot-lovebird/">طوطی برزیلی</a>، کشنده است. کافئین، شکلات، الکل، نمک و تنقلات شور، پیاز و سیر، هستهٔ میوه‌ها و لوبیای خام هم ممنوع‌اند. دود سیگار و بخار تابه‌های نچسب داغ‌شده (تفلون) هم برای ریه‌های حساس پرندگان خطرناک است، هرچند خوراکی نیستند.</p>
+  <h2>اگر حیوانم چیز سمی خورد چه کنم؟</h2>
+  <ol>
+    <li>خوراکی را از دسترس دور کنید و بسته یا باقی‌مانده‌اش را نگه دارید.</li>
+    <li>زمان، مقدار تقریبی و وزن حیوان را یادداشت کنید.</li>
+    <li>فوراً با دامپزشک یا کلینیک شبانه‌روزی تماس بگیرید. بدون دستور دامپزشک حیوان را وادار به استفراغ نکنید و آب‌نمک، روغن یا شیر به او ندهید.</li>
+    <li>حتی اگر حالش خوب به نظر می‌رسد، تماس بگیرید؛ علائم برخی سموم مثل انگور یا زایلیتول ساعت‌ها بعد ظاهر می‌شود.</li>
+  </ol>
+  <p>برای تهیهٔ غذای خانگی سالم، <a href="/blog/cat-food-homemade/">اصول غذای گربه خانگی</a> را بخوانید و اگر به گربه‌های محله غذا می‌دهید، <a href="/blog/street-cat-food/">راهنمای غذای گربه‌های خیابانی</a> به شما می‌گوید ته‌ماندهٔ کدام غذاها خطرناک است.</p>
+  <h2>منابع</h2>
+  <ul class="meta">
+    <li><a href="https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets" rel="nofollow noopener" target="_blank">ASPCA Animal Poison Control: People Foods to Avoid Feeding Your Pets</a></li>
+    <li><a href="https://www.petpoisonhelpline.com/poisons/" rel="nofollow noopener" target="_blank">Pet Poison Helpline: Poisons list</a></li>
+    <li><a href="https://www.merckvetmanual.com/toxicology" rel="nofollow noopener" target="_blank">Merck Veterinary Manual: Toxicology</a></li>
+    <li><a href="https://vcahospitals.com/know-your-pet" rel="nofollow noopener" target="_blank">VCA Animal Hospitals: Know Your Pet</a></li>
+    <li><a href="https://lafeber.com/vet/" rel="nofollow noopener" target="_blank">LafeberVet (avian medicine)</a> و <a href="https://www.aav.org/" rel="nofollow noopener" target="_blank">Association of Avian Veterinarians</a></li>
+  </ul>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const items = Array.from(document.querySelectorAll('#flist .food'));
+    const norm = (s) => s.replace(/[\u064A]/g, 'ی').replace(/[\u0643]/g, 'ک').replace(/[\u200c\s]+/g, ' ').trim();
+    let sp = 'all', v = 'all';
+    const q0 = new URLSearchParams(location.search).get('q'); if (q0) ($('fq') as HTMLInputElement).value = q0;
+    function run() {
+      const q = norm(($('fq') as HTMLInputElement).value); let n = 0;
+      items.forEach((el) => {
+        const name = norm(el.dataset.name || '');
+        const okQ = !q || q.split(' ').every((w) => name.includes(w)) || name.replace(/ /g, '').includes(q.replace(/ /g, ''));
+        const vs = sp === 'all' ? [el.dataset.dog, el.dataset.cat, el.dataset.bird] : [el.dataset[sp]];
+        const okV = v === 'all' || vs.includes(v);
+        const show = okQ && okV; (el as HTMLElement).hidden = !show; if (show) n++;
+        el.querySelectorAll('.badge').forEach((b) => { (b as HTMLElement).style.display = sp === 'all' || (b as HTMLElement).dataset.for === sp ? '' : 'none'; });
+      });
+      $('fcount').textContent = (n + ' خوراکی').replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[+d]); $('fnone').hidden = n > 0;
+    }
+    const chips = (id, set) => $(id).addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (!b) return; $(id).querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); set(b); run(); });
+    chips('fsp', (b) => (sp = b.dataset.sp)); chips('fv', (b) => (v = b.dataset.v));
+    $('fq').addEventListener('input', run); run();
+  </script>
+</Tool>
