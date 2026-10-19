@@ -1,0 +1,85 @@
+---
+import Tool from '../../layouts/Tool.astro';
+import { FISH } from '../../scripts/aquarium.js';
+const faq = [
+  { q: 'حجم آکواریوم را چطور حساب کنم؟', a: 'برای آکواریوم مکعب مستطیل، طول × عرض × ارتفاع (به سانتی‌متر) را در هم ضرب و بر ۱۰۰۰ تقسیم کنید تا حجم به لیتر به دست آید. مثلاً آکواریوم ۶۰ × ۳۰ × ۳۵ سانتی‌متری ۶۳ لیتر حجم ناخالص دارد. حجم واقعی آب کمتر است، چون آب تا لبه پر نمی‌شود و بستر و دکور جای آب را می‌گیرند؛ معمولاً ۱۵ تا ۳۰ درصد کمتر.' },
+  { q: 'در آکواریوم ۶۰ لیتری چند ماهی می‌توان نگه داشت؟', a: 'به اندازهٔ بزرگسالی ماهی‌ها بستگی دارد، نه اندازهٔ فعلی‌شان. قاعدهٔ سرانگشتی «حدود ۱ سانتی‌متر ماهی بالغ به ازای هر لیتر آب» یا «۱ سانتی‌متر به ازای هر ۳۰ سانتی‌متر مربع سطح آب» برای ماهی‌های کوچک و باریک گرمسیری است. در عمل یک آکواریوم ۶۰ لیتری برای مثلاً یک گلهٔ ۸ تا ۱۰ تایی نئون و ۶ کوریدوراس یا چند گوپی و پلاتی مناسب است.' },
+  { q: 'چرا گلدفیش به آکواریوم بزرگ نیاز دارد؟', a: 'گلدفیش‌ها پرخور و پرفضله‌اند و برخلاف تصور رایج در تُنگ کوچک نمی‌مانند؛ گلدفیش فانتزی به ۱۵ تا ۲۰ سانت و گلدفیش معمولی (ماهی قرمز سفرهٔ هفت‌سین) به ۲۵ تا ۳۰ سانت می‌رسد. توصیهٔ رایج حدود ۷۵ لیتر برای اولین گلدفیش فانتزی و ۴۰ لیتر برای هر گلدفیش بعدی است. ماهی قرمز معمولی در بزرگسالی برای حوض مناسب‌تر است.' },
+  { q: 'بخاری و فیلتر آکواریوم چه قدرتی لازم دارد؟', a: 'برای ماهی‌های گرمسیری معمولاً حدود ۱ وات بخاری به ازای هر لیتر کافی است (در اتاق‌های سرد بیشتر). فیلتر باید در ساعت دست‌کم ۴ تا ۶ برابر حجم آکواریوم آب را جابه‌جا کند؛ برای گلدفیش و ماهی‌های پرفضله ۸ تا ۱۰ برابر بهتر است.' },
+  { q: 'آکواریوم پر از آب چقدر وزن دارد؟', a: 'هر لیتر آب شیرین حدود ۱ کیلوگرم است و شن و سنگ بستر هم حدود ۱٫۶ کیلوگرم در هر لیتر. یک آکواریوم ۱۰۰ لیتری با بستر و شیشه به‌راحتی از ۱۲۰ کیلوگرم بیشتر می‌شود؛ پس از میز یا پایهٔ محکم و تراز استفاده کنید.' },
+];
+const links = [['/blog/freshwater-aquarium-fish/','ماهی‌های آکواریومی آب شیرین برای مبتدی‌ها'],['/fish/','همهٔ مطالب ماهی و آکواریوم'],['/tools/pet-quiz/','کدام حیوان خانگی مناسب من است؟'],['/tools/toxic-foods/','این خوراکی برای حیوانم مجاز است؟']];
+---
+<Tool title="محاسبه حجم آکواریوم و تعداد ماهی (لیتر، وزن، بخاری)" h1="محاسبه حجم آکواریوم و ظرفیت ماهی" description="ماشین‌حساب رایگان حجم آکواریوم به لیتر (مکعب، استوانه، شش‌ضلعی، گوشه‌ای)، حجم واقعی آب، وزن، قدرت بخاری و فیلتر، و محاسبهٔ ظرفیت ماهی با هشدار سازگاری گونه‌ها." slug="aquarium-calculator" illo="fish" faq={faq} links={links}>
+  <div slot="calc" class="calc" id="acalc">
+    <label for="ash">شکل آکواریوم</label>
+    <select id="ash"><option value="rect">مکعب مستطیل (معمولی)</option><option value="cyl">استوانه‌ای</option><option value="hex">شش‌ضلعی منتظم</option><option value="corner">گوشه‌ای (ربع دایره)</option></select>
+    <div class="row">
+      <div><label for="aa" id="aal">طول (سانتی‌متر)</label><input id="aa" type="text" inputmode="decimal" value="60" /></div>
+      <div id="abw"><label for="ab">عرض (سانتی‌متر)</label><input id="ab" type="text" inputmode="decimal" value="30" /></div>
+    </div>
+    <div class="row">
+      <div><label for="ah">ارتفاع (سانتی‌متر)</label><input id="ah" type="text" inputmode="decimal" value="35" /></div>
+      <div><label for="asub">ضخامت بستر (سانتی‌متر)</label><input id="asub" type="text" inputmode="decimal" value="5" /></div>
+    </div>
+    <div class="row">
+      <div><label for="agap">فاصلهٔ آب تا لبه (سانتی‌متر)</label><input id="agap" type="text" inputmode="decimal" value="3" /></div>
+      <div><label for="adec">جای سنگ و دکور (٪)</label><input id="adec" type="text" inputmode="decimal" value="10" /></div>
+    </div>
+    <div class="result" aria-live="polite"><div>حجم ناخالص آکواریوم</div><div class="big" id="agross">—</div><div class="sub" id="anet"></div><div class="sub" id="aeq" style="margin-top:6px"></div></div>
+    <h3>ظرفیت ماهی (اختیاری)</h3>
+    <p class="meta" style="margin:0">ماهی‌هایی را که دارید یا می‌خواهید اضافه کنید؛ محاسبه با اندازهٔ <b>بالغ</b> ماهی است.</p>
+    <div class="row"><div><label for="afish">گونه</label><select id="afish">{FISH.map((f) => <option value={f[0]}>{f[1]} (تا {String(f[2]).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[+d])} سانت)</option>)}</select></div><div><label for="an">تعداد</label><input id="an" type="number" min="1" max="100" value="6" /></div></div>
+    <div class="actions"><button class="btn sec" type="button" id="aadd">افزودن به فهرست</button></div>
+    <div class="stocklist" id="alist"></div>
+    <div class="result" id="astock" hidden aria-live="polite"><div>میزان پر بودن آکواریوم</div><div class="big" id="apct"></div><div class="sub" id="aload"></div><ul id="awarn" style="text-align:right;margin:8px 0 0;font-size:.92rem"></ul></div>
+  </div>
+  <p>پیش از خرید ماهی، فیلتر یا بخاری، باید بدانید آکواریومتان واقعاً چند لیتر آب دارد. عددی که فروشنده می‌گوید معمولاً حجم ناخالص (ابعاد بیرونی) است، در حالی که دوز داروها و کودها، قدرت فیلتر و تعداد ماهی به <strong>حجم واقعی آب</strong> بستگی دارد. این ماشین‌حساب هر دو را حساب می‌کند و با یک قاعدهٔ سرانگشتی محتاطانه نشان می‌دهد آکواریوم شما برای ماهی‌های انتخابی‌تان چقدر پر است.</p>
+  <h2>فرمول حجم آکواریوم</h2>
+  <ul>
+    <li><strong>مکعب مستطیل:</strong> طول × عرض × ارتفاع ÷ ۱۰۰۰ = لیتر (ابعاد به سانتی‌متر).</li>
+    <li><strong>استوانه‌ای:</strong> ۳٫۱۴ × (قطر ÷ ۲)² × ارتفاع ÷ ۱۰۰۰.</li>
+    <li><strong>شش‌ضلعی منتظم:</strong> ۲٫۶ × ضلع² × ارتفاع ÷ ۱۰۰۰.</li>
+    <li><strong>گوشه‌ای ربع‌دایره:</strong> ۳٫۱۴ × شعاع² ÷ ۴ × ارتفاع ÷ ۱۰۰۰.</li>
+  </ul>
+  <p>برای حجم واقعی، ارتفاع آب را به جای ارتفاع شیشه بگذارید (معمولاً ۲ تا ۵ سانت پایین‌تر از لبه)، ضخامت بستر را کم کنید و حدود ۵ تا ۱۵ درصد برای سنگ و چوب و دکور در نظر بگیرید. اگر ابعاد بیرونی را اندازه می‌گیرید، ضخامت شیشه (معمولاً ۰٫۵ تا ۱ سانت) را هم از هر بعد کم کنید.</p>
+  <h2>چند ماهی در آکواریوم بگذارم؟</h2>
+  <p>دو قاعدهٔ قدیمی و پرکاربرد وجود دارد: «حدود ۱ سانتی‌متر طول ماهی بالغ (بدون دم) به ازای هر لیتر آب» و «۱ سانتی‌متر به ازای هر ۳۰ سانتی‌متر مربع سطح آب» برای ماهی‌های گرمسیری؛ برای ماهی‌های آب سرد مثل گلدفیش این مقادیر نصف‌اند (۷۵ سانتی‌متر مربع). سطح آب مهم است چون تبادل اکسیژن از همان‌جا انجام می‌شود. این قواعد برای ماهی‌های کوچک و باریک ساخته شده‌اند و ماهی‌های تنومند مثل گلدفیش، اسکار یا پلکو چند برابر طولشان فضله تولید می‌کنند؛ برای همین ماشین‌حساب برای آن‌ها ضریب بار زیستی بالاتری در نظر می‌گیرد.</p>
+  <p>این عددها جایگزین تجربه نیستند. فیلتر قوی، تعویض منظم آب (هفته‌ای ۲۰ تا ۳۰ درصد) و آزمایش آمونیاک و نیتریت مهم‌ترند. فهرست ماهی‌های مناسب مبتدی‌ها، اندازهٔ بالغ و نکات سازگاری‌شان را در <a href="/blog/freshwater-aquarium-fish/">راهنمای ماهی‌های آکواریومی آب شیرین</a> ببینید.</p>
+  <h2>پیش از اضافه کردن ماهی: چرخهٔ نیتروژن</h2>
+  <p>آکواریوم تازه‌راه‌اندازی‌شده هنوز باکتری‌های مفید کافی برای تبدیل آمونیاک سمی به نیترات ندارد. این فرایند حدود ۴ تا ۶ هفته طول می‌کشد. ماهی‌ها را تدریجی، چند عدد در هر نوبت، اضافه کنید و در هفته‌های اول آب را مرتب آزمایش کنید. «سندروم آکواریوم نو» شایع‌ترین علت مرگ ماهی‌های مبتدی‌هاست.</p>
+  <h2>تجهیزات بر اساس حجم</h2>
+  <table><thead><tr><th>حجم</th><th>بخاری (گرمسیری)</th><th>فیلتر (لیتر در ساعت)</th></tr></thead><tbody>
+    <tr><td>۳۰ لیتر</td><td>۲۵ تا ۵۰ وات</td><td>۱۵۰ تا ۳۰۰</td></tr>
+    <tr><td>۶۰ لیتر</td><td>۵۰ تا ۷۵ وات</td><td>۲۵۰ تا ۴۰۰</td></tr>
+    <tr><td>۱۰۰ لیتر</td><td>۱۰۰ وات</td><td>۴۰۰ تا ۶۰۰</td></tr>
+    <tr><td>۲۰۰ لیتر</td><td>۲۰۰ وات (یا دو بخاری ۱۰۰ وات)</td><td>۸۰۰ تا ۱۲۰۰</td></tr>
+  </tbody></table>
+  <script>
+    import { SHAPES, volume, stocking, FISH } from '../../scripts/aquarium.js';
+    import { fa, num } from '../../scripts/jalali.js';
+    const $ = (id) => document.getElementById(id);
+    const stock = {}; const r1 = (x) => fa(Math.round(x * 10) / 10), r0 = (x) => fa(Math.round(x));
+    function vol() { return volume({ shape: $('ash').value, a: num($('aa').value), b: num($('ab').value), h: num($('ah').value), gap: num($('agap').value) || 0, sub: num($('asub').value) || 0, decor: num($('adec').value) || 0 }); }
+    function run() {
+      const sh = SHAPES[$('ash').value]; $('aal').textContent = sh.dims[0] + ' (سانتی‌متر)'; $('abw').hidden = !sh.dims[1];
+      const v = vol();
+      if (!(v.gross > 0) || !isFinite(v.gross)) { $('agross').textContent = '—'; $('anet').textContent = 'ابعاد را به سانتی‌متر وارد کنید.'; $('aeq').textContent = ''; $('astock').hidden = true; return; }
+      $('agross').textContent = r1(v.gross) + ' لیتر'; $('agross').dataset.l = v.gross.toFixed(2);
+      $('anet').textContent = 'آب واقعی: حدود ' + r1(v.water) + ' لیتر (خالص پس از دکور: ' + r1(v.net) + ' لیتر) · ' + r1(v.gal) + ' گالن آمریکایی';
+      $('anet').dataset.water = v.water.toFixed(2);
+      $('aeq').textContent = 'وزن تقریبی آب و بستر: ' + r0(v.weight) + ' کیلوگرم + شیشه · بخاری گرمسیری: حدود ' + r0(Math.max(25, Math.round(v.water / 25) * 25)) + ' وات · فیلتر: ' + r0(v.water * 4) + ' تا ' + r0(v.water * 6) + ' لیتر در ساعت';
+      const ids = Object.keys(stock).filter((k) => stock[k] > 0); const list = $('alist'); list.innerHTML = '';
+      ids.forEach((id) => { const f = FISH.find((x) => x[0] === id); const d = document.createElement('div'); d.className = 'it'; d.innerHTML = `<span>${f[1]}${f[7] ? ' <small class="meta">(' + f[7] + ')</small>' : ''}</span>`; const inp = document.createElement('input'); inp.type = 'number'; inp.min = '0'; inp.max = '100'; inp.value = String(stock[id]); inp.setAttribute('aria-label', 'تعداد ' + f[1]); inp.oninput = () => { stock[id] = Math.max(0, parseInt(inp.value) || 0); run(); }; const x = document.createElement('button'); x.type = 'button'; x.className = 'btn sec'; x.style.padding = '4px 0'; x.textContent = '×'; x.setAttribute('aria-label', 'حذف'); x.onclick = () => { delete stock[id]; run(); }; d.append(inp, x); list.appendChild(d); });
+      if (!ids.length) { $('astock').hidden = true; return; }
+      const cold = ids.some((id) => FISH.find((x) => x[0] === id)[6] === 'cold');
+      const s = stocking(stock, v, cold); $('astock').hidden = false;
+      $('apct').textContent = r0(s.pct) + '٪'; $('apct').dataset.pct = s.pct.toFixed(1);
+      $('aload').textContent = (s.pct <= 80 ? 'مناسب؛ جای کمی ماهی دیگر هم هست.' : s.pct <= 100 ? 'پر؛ ماهی دیگری اضافه نکنید.' : s.pct <= 130 ? 'کمی بیش از ظرفیت؛ فیلتر قوی و تعویض آب بیشتر لازم است.' : 'بیش از ظرفیت؛ آکواریوم بزرگ‌تر یا ماهی کمتر.') + ' (بار زیستی ' + r0(s.load) + ' از ظرفیت حدود ' + r0(s.cap) + ' سانتی‌متر ماهی' + (cold ? '، قاعدهٔ آب سرد' : '') + ')';
+      $('awarn').innerHTML = ''; s.warn.forEach((w) => { const li = document.createElement('li'); li.textContent = fa(w); $('awarn').appendChild(li); });
+    }
+    $('aadd').addEventListener('click', () => { const id = $('afish').value, n = Math.max(1, parseInt($('an').value) || 1); stock[id] = (stock[id] || 0) + n; run(); });
+    ['ash', 'aa', 'ab', 'ah', 'asub', 'agap', 'adec'].forEach((id) => { $(id).addEventListener('input', run); $(id).addEventListener('change', run); });
+    run();
+  </script>
+</Tool>
